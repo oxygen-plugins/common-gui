@@ -2,9 +2,10 @@ package com.github.oxygenPlugins.common.gui.process;
 
 import javax.swing.JFrame;
 
-import com.nkutsche.common.process.exceptions.CancelException;
-import com.nkutsche.common.process.exceptions.ErrorViewer;
-import com.nkutsche.common.process.log.ProcessLoger;
+import com.github.oxygenPlugins.common.process.exceptions.CancelException;
+import com.github.oxygenPlugins.common.process.exceptions.ErrorViewer;
+import com.github.oxygenPlugins.common.process.log.ProcessLoger;
+
 
 
 public class ProgressListener implements ProcessLoger {

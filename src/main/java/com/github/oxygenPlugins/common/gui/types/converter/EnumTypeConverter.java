@@ -5,7 +5,8 @@ import javax.xml.xpath.XPathExpressionException;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.nkutsche.common.xml.xpath.XPathReader;
+import com.github.oxygenPlugins.common.xml.xpath.XPathReader;
+
 
 public class EnumTypeConverter extends TypeConverter {
 

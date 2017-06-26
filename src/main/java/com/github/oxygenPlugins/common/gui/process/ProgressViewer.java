@@ -12,8 +12,8 @@ import javax.swing.JProgressBar;
 import javax.swing.UIManager;
 
 import com.github.oxygenPlugins.common.gui.swing.SwingUtil;
-import com.nkutsche.common.process.exceptions.CancelException;
-import com.nkutsche.common.process.exceptions.ErrorViewer;
+import com.github.oxygenPlugins.common.process.exceptions.CancelException;
+import com.github.oxygenPlugins.common.process.exceptions.ErrorViewer;
 
 
 

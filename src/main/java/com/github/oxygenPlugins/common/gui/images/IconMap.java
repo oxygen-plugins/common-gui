@@ -27,9 +27,21 @@ public final class IconMap {
 
 	public static IconMap ICONS;
 	public static File BASE_DIR = new File(".");
-
+	
+	private static final Class<?> ICON_MAP_CLASS;
+	
+	static {
+		Class<?> imc = null;
+		try {
+			 imc = Class.forName("com.github.oxygenPlugins.common.gui.images.IconMap");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		ICON_MAP_CLASS = imc;
+	}
+	
 	public IconMap(String resource) throws IOException {
-		this(new Object().getClass().getResourceAsStream(resource));
+		this(ICON_MAP_CLASS.getResourceAsStream(resource));
 	}
 
 	public IconMap(File imageMapFile) throws FileNotFoundException, IOException {
@@ -37,7 +49,7 @@ public final class IconMap {
 				: new File(BASE_DIR, imageMapFile.getPath())));
 	}
 
-	private IconMap(InputStream in) throws IOException {
+	public IconMap(InputStream in) throws IOException {
 		if (in != null) {
 			GifDecoder decoder = new GifDecoder();
 			decoder.read(in);
@@ -52,7 +64,7 @@ public final class IconMap {
 		this(resMapPath);
 	}
 
-	private static String resMapPath = "/icons/diagona_my.gif";
+	public static String resMapPath = "/icons/diagona_my.gif";
 
 	private static final int intervallX = 23;
 	private static final int intervallY = 26;
@@ -90,7 +102,7 @@ public final class IconMap {
 	public static final Point QUICKFIX_HAS_LINK = new Point(8, 16);
 
 	public static ImageIcon getIcon(String source) throws IOException{
-		InputStream is = new Object().getClass().getResourceAsStream(source);
+		InputStream is = ICON_MAP_CLASS.getResourceAsStream(source);
 		BufferedImage image = null;
 		if(is != null){
 			image = ImageIO.read(is);

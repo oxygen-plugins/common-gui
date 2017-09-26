@@ -1,12 +1,14 @@
 package com.github.oxygenPlugins.common.gui.types;
 
 import java.awt.Container;
+import java.awt.event.MouseListener;
 import java.util.HashMap;
 
 import javax.swing.JFormattedTextField;
 
 import com.github.oxygenPlugins.common.gui.types.converter.EnumTypeConverter;
 import com.github.oxygenPlugins.common.gui.types.converter.TypeConverter;
+import com.github.oxygenPlugins.common.gui.types.panels._EntryPanel;
 
 
 public class VerifierFactory {
@@ -64,5 +66,15 @@ public class VerifierFactory {
 	
 	public static void installVerifier(String type, _Verifier verifier){
 		typeVerifierMap.put(type, verifier);
+	}
+	
+	public static void fireEntryPanel(JFormattedTextField field){
+		for (MouseListener ml : field.getMouseListeners()) {
+			if(ml instanceof _EntryPanel){
+				_EntryPanel entryPanel = (_EntryPanel) ml;
+				entryPanel.activate();
+				break;
+			}
+		}
 	}
 }

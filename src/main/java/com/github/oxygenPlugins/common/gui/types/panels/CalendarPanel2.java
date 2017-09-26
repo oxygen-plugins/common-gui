@@ -40,7 +40,7 @@ import com.github.oxygenPlugins.common.gui.images.IconMap;
 import com.github.oxygenPlugins.common.gui.swing.SwingUtil;
 
 
-public class CalendarPanel2 extends JPanel implements MouseListener {
+public class CalendarPanel2 extends JPanel implements MouseListener, _EntryPanel {
 	private static final long serialVersionUID = -4261661006435142610L;
 	private final JDialog dialog;
 	private final JTextField textField;
@@ -159,7 +159,7 @@ public class CalendarPanel2 extends JPanel implements MouseListener {
 	
 	
 	
-	private void activate() {
+	public void activate() {
 		String text = this.textField.getText();
 		DateTime actuellDat = convert(text);
 		buildCalendar(actuellDat, actuellDat);

@@ -39,7 +39,7 @@ import com.github.oxygenPlugins.common.gui.swing.SwingUtil;
 import com.github.oxygenPlugins.common.gui.types._Verifier;
 
 //
-public class StringPanel extends JPanel implements MouseListener, FocusListener {
+public class StringPanel extends JPanel implements MouseListener, FocusListener, _EntryPanel {
 	private static final long serialVersionUID = 2661956887580911488L;
 	private final GridBagLayout gbl;
 	private final int minWidth = 75;
@@ -282,7 +282,7 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener 
 		// TODO Auto-generated method stub
 		
 	}
-	private void activate(){
+	public void activate(){
 //		if (textField.isEnabled()) {
 			this.getText();
 //			if (dialog != null) {

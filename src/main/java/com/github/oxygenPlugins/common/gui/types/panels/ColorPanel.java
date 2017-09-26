@@ -32,7 +32,7 @@ import com.github.oxygenPlugins.common.gui.swing.SwingUtil;
 
 
 
-public class ColorPanel extends JPanel implements MouseListener{
+public class ColorPanel extends JPanel implements MouseListener, _EntryPanel{
 	private static final long serialVersionUID = 2661956887580911488L;
 	private final GridBagLayout gbl;
 	private final int minWidth = 150;
@@ -159,6 +159,11 @@ public class ColorPanel extends JPanel implements MouseListener{
 	}
 	@Override
 	public void mousePressed(MouseEvent e) {
+		activate();
+	}
+	
+	@Override
+	public void activate() {
 		if (textField.isEnabled()) {
 			this.getColor();
 			if (dialog != null)

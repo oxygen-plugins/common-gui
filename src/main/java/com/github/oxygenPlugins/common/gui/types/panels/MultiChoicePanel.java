@@ -43,7 +43,7 @@ import com.github.oxygenPlugins.common.gui.images.IconMap;
 import com.github.oxygenPlugins.common.gui.swing.SwingUtil;
 
 //
-public class MultiChoicePanel extends JPanel implements MouseListener, FocusListener {
+public class MultiChoicePanel extends JPanel implements MouseListener, FocusListener, _EntryPanel {
 	private static final long serialVersionUID = 2661956887580911488L;
 	private final GridBagLayout gbl;
 	
@@ -335,7 +335,7 @@ public class MultiChoicePanel extends JPanel implements MouseListener, FocusList
 		// TODO Auto-generated method stub
 		
 	}
-	private void activate(){
+	public void activate(){
 //		if (textField.isEnabled()) {
 //			if (dialog != null) {
 //				dispose();

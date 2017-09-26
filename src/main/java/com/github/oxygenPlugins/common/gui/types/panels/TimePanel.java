@@ -37,7 +37,7 @@ import com.github.oxygenPlugins.common.gui.types.IntegerAreaVerifier;
 
 
 
-public class TimePanel extends JPanel implements MouseListener {
+public class TimePanel extends JPanel implements MouseListener, _EntryPanel {
 	private static final long serialVersionUID = -4261661006435142610L;
 	private final JDialog dialog;
 	private final JTextField textField;
@@ -150,6 +150,11 @@ public class TimePanel extends JPanel implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		activate();
+	}
+	
+	@Override
+	public void activate() {
 		if (textField.isEnabled()) {
 
 			String text = this.textField.getText();

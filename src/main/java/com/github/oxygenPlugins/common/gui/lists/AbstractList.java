@@ -64,7 +64,9 @@ public abstract class AbstractList<ModelNodeType extends _ListNode, ListItemType
 
 		toolbarPanel.setLayout(gbl_toolbarPanel);
 		bottombarPanel.setLayout(gbl_bottombarPanel);
-
+		
+		this.content.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+		
 		scrollPane = new JScrollPane(this.content);
 		ScrollPaneLayout spl = new ScrollPaneLayout();
 		scrollPane.setLayout(spl);

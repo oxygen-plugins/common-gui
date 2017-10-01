@@ -34,13 +34,14 @@ import org.joda.time.format.DateTimeFormatter;
 import com.github.oxygenPlugins.common.gui.images.IconMap;
 import com.github.oxygenPlugins.common.gui.swing.SwingUtil;
 import com.github.oxygenPlugins.common.gui.types.IntegerAreaVerifier;
+import com.github.oxygenPlugins.common.gui.types.LabelField;
 
 
 
 public class TimePanel extends JPanel implements MouseListener, _EntryPanel {
 	private static final long serialVersionUID = -4261661006435142610L;
 	private final JDialog dialog;
-	private final JTextField textField;
+	private final LabelField textField;
 
 	private final Font defFont;
 
@@ -66,7 +67,7 @@ public class TimePanel extends JPanel implements MouseListener, _EntryPanel {
 			new Color(110, 100, 200));
 	private String initialValue;
 
-	public TimePanel(JFormattedTextField field, int fontSize, Container owner) {
+	public TimePanel(LabelField field, int fontSize, Container owner) {
 		
 		if(field.isEnabled()){
 			initialValue = field.getText();
@@ -177,7 +178,7 @@ public class TimePanel extends JPanel implements MouseListener, _EntryPanel {
 			dispose();
 		}
 	}
-
+	
 	private Point getDialogBounds() {
 
 		Point tfLoc = textField.getLocationOnScreen();
@@ -235,11 +236,11 @@ public class TimePanel extends JPanel implements MouseListener, _EntryPanel {
 		IntegerAreaVerifier iavMinutes = new IntegerAreaVerifier(0, 59);
 		IntegerAreaVerifier iavSec = new IntegerAreaVerifier(0, 59);
 
-		iavHour.setVerifier(hour, dialog, false);
+		iavHour.setVerifier(hour, dialog);
 
-		iavMinutes.setVerifier(minutes, dialog, false);
+		iavMinutes.setVerifier(minutes, dialog);
 
-		iavSec.setVerifier(sec, dialog, false);
+		iavSec.setVerifier(sec, dialog);
 
 		setTime(actuell);
 //		int tinySize = 25;

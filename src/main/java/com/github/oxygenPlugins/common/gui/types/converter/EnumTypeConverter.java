@@ -11,19 +11,23 @@ import com.github.oxygenPlugins.common.xml.xpath.XPathReader;
 public class EnumTypeConverter extends TypeConverter {
 
 	private final Object[] enumValues;
+	private static XPathReader xpathreader = new XPathReader();
 
-	public EnumTypeConverter(String type, NodeList values) {
-		super(type);
-		XPathReader xpathreader = new XPathReader();
+	private static String getNodeValue(Node node) {
+		try {
+			return xpathreader.getString(".", node);
+		} catch (XPathExpressionException e) {
+			return null;
+		}
+	}
+
+	public EnumTypeConverter(String type, NodeList values, int defaultValue) {
+		super(type, TypeConverter.convertValue(getNodeValue(values.item(defaultValue)), type));
 		// E N U M E R A T I O N
 		enumValues = new Object[values.getLength()];
 		for (int i = 0; i < values.getLength(); i++) {
 			Node enumVal = values.item(i);
-			try {
-				enumValues[i] = this.convertValue(xpathreader.getString(".", enumVal));
-			} catch (XPathExpressionException e) {
-				enumValues[i] = null;
-			}
+			enumValues[i] = this.convertValue(getNodeValue(enumVal));
 		}
 
 	}
@@ -31,8 +35,8 @@ public class EnumTypeConverter extends TypeConverter {
 	public Object[] getEnumValues() {
 		return enumValues;
 	}
-	
-	public String[] getEnumValuesAsString(){
+
+	public String[] getEnumValuesAsString() {
 		String[] values = new String[enumValues.length];
 		int i = 0;
 		for (Object val : enumValues) {

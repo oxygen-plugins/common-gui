@@ -9,6 +9,7 @@ import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Label;
 import java.awt.Point;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -36,6 +37,7 @@ import javax.swing.border.Border;
 
 import com.github.oxygenPlugins.common.gui.images.IconMap;
 import com.github.oxygenPlugins.common.gui.swing.SwingUtil;
+import com.github.oxygenPlugins.common.gui.types.LabelField;
 import com.github.oxygenPlugins.common.gui.types._Verifier;
 
 //
@@ -45,51 +47,54 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 	private final int minWidth = 75;
 	private final int minHeight = 0;
 	private JDialog dialog;
-//	private final Border defaultBorder = BorderFactory.createBevelBorder(
-//			BevelBorder.RAISED, new Color(240, 240, 240), new Color(150, 150,
-//					150));
-	private final Border outlineBorder = BorderFactory.createBevelBorder(
-			BevelBorder.LOWERED, new Color(110, 110, 110), new Color(200, 200,
-					200));
-//	private final Border selectBorder = BorderFactory.createBevelBorder(
-//			BevelBorder.RAISED, new Color(30, 20, 120),
-//			new Color(110, 100, 200));
-	private JFormattedTextField textField;
-	
+	// private final Border defaultBorder = BorderFactory.createBevelBorder(
+	// BevelBorder.RAISED, new Color(240, 240, 240), new Color(150, 150,
+	// 150));
+	private final Border outlineBorder = BorderFactory.createBevelBorder(BevelBorder.LOWERED, new Color(110, 110, 110),
+			new Color(200, 200, 200));
+	// private final Border selectBorder = BorderFactory.createBevelBorder(
+	// BevelBorder.RAISED, new Color(30, 20, 120),
+	// new Color(110, 100, 200));
+	private LabelField textField;
+
 	private String value;
 	private final String initialValue;
-	
+
 	private JFormattedTextField entryField;
 	private final Container owner;
-	
+
 	private final JPanel buttonPanel = new JPanel();
 	private final JButton okBtn;
 	@SuppressWarnings("unused")
 	private final JButton cancelBtn;
-	private final JButton clearBtn; 
-	
-	private class PanelButton extends JButton{
+	private final JButton clearBtn;
+
+	private class PanelButton extends JButton {
 		private static final long serialVersionUID = 1699184718806511284L;
-		public PanelButton(Icon i){
+
+		public PanelButton(Icon i) {
 			this.setIcon(i);
 			Dimension dim = new Dimension(i.getIconWidth() + 1, i.getIconHeight() + 1);
 			this.setMinimumSize(dim);
 			this.setSize(dim);
 		}
-		public PanelButton(String text){
+
+		public PanelButton(String text) {
 			super(text);
 		}
 	}
-	
-	public StringPanel(final JFormattedTextField field, _Verifier verifier, Container owner){
+
+	public StringPanel(final LabelField field, _Verifier verifier, Container owner) {
 		this(field, owner);
-		verifier.setVerifier(entryField, owner, false);
+		if(verifier != null)
+			verifier.setVerifier(entryField, owner);
 	}
-	public StringPanel(final JFormattedTextField field, Container owner) {
+
+	public StringPanel(final LabelField field, Container owner) {
 		this.owner = owner;
 		this.textField = field;
 		textField.setHorizontalAlignment(JTextField.CENTER);
-		if(field.isEnabled()){
+		if (field.isEnabled()) {
 			initialValue = field.getText();
 			value = initialValue;
 		} else {
@@ -100,19 +105,19 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 		setBackground(Color.WHITE);
 		gbl = new GridBagLayout();
 		this.setLayout(gbl);
-		
+
 		GridBagLayout buttonGbl = new GridBagLayout();
 		buttonPanel.setLayout(buttonGbl);
 		buttonPanel.setVisible(false);
-		
-		if(IconMap.ICONS == null){
+
+		if (IconMap.ICONS == null) {
 			try {
 				IconMap.ICONS = new IconMap();
 			} catch (IOException e) {
 			}
 		}
-		
-		if(IconMap.ICONS != null){
+
+		if (IconMap.ICONS != null) {
 			IconMap icons = IconMap.ICONS;
 			this.okBtn = new PanelButton(icons.getIcon(2, 10));
 			this.clearBtn = new PanelButton(icons.getIcon(10, 11));
@@ -122,14 +127,14 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 			this.clearBtn = new PanelButton("x");
 			this.cancelBtn = new PanelButton("c");
 		}
-		
+
 		this.okBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
 		});
-		
+
 		this.clearBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -137,199 +142,198 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 			}
 		});
 
-//		this.okBtn.setVisible(false);
-//		this.clearBtn.setVisible(false);
-//		this.cancelBtn.setVisible(false);
-		
+		// this.okBtn.setVisible(false);
+		// this.clearBtn.setVisible(false);
+		// this.cancelBtn.setVisible(false);
+
 		
 		entryField = new JFormattedTextField();
-		if(value == null){
+		if (value == null) {
 			entryField.setText("");
 		} else {
 			entryField.setText(value);
 		}
 		KeyListener[] kls = textField.getKeyListeners();
-		
+
 		for (int i = 0; i < kls.length; i++) {
 			entryField.addKeyListener(kls[i]);
 		}
 		entryField.addKeyListener(new KeyListener() {
 			@Override
-			public void keyTyped(KeyEvent e) {}
+			public void keyTyped(KeyEvent e) {
+			}
+
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if(e.getKeyChar()=='\n'){
+				if (e.getKeyChar() == '\n') {
 					dispose();
-					if (textField instanceof FocusTraversalField) {
-						FocusTraversalField focusField = (FocusTraversalField) textField;
-						focusField.nextFocus();
-					}
-				} else if(e.getKeyChar() == KeyEvent.VK_ESCAPE){
+					textField.nextFocus();
+				} else if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
 					dispose(true);
-					if (textField instanceof FocusTraversalField) {
-						FocusTraversalField focusField = (FocusTraversalField) textField;
-						focusField.parentFocus();
-					}
-				} else if(e.getKeyChar() == KeyEvent.VK_TAB){
-					if(textField instanceof FocusTraversalField){
-						FocusTraversalField focusField = (FocusTraversalField) textField;
-						
-						dispose();
-						
-						if(e.isShiftDown()){
-							focusField.prevFocus();
-						} else {
-							focusField.nextFocus();
-						}
+					textField.parentFocus();
+				} else if (e.getKeyChar() == KeyEvent.VK_TAB) {
+
+					dispose();
+
+					if (e.isShiftDown()) {
+						textField.prevFocus();
+					} else {
+						textField.nextFocus();
 					}
 				}
 			}
+
 			@Override
-			public void keyPressed(KeyEvent e) {}
+			public void keyPressed(KeyEvent e) {
+			}
 		});
 
-		if(textField instanceof FocusTraversalField){
-			textField.setFocusable(true);
-			entryField.setFocusTraversalKeysEnabled(false);
-			((FocusTraversalField) textField).removeAllFocusListener();
-			textField.addFocusListener(this);
-		}
-		
-		SwingUtil.addComponent(this, gbl, entryField,
-				0, 0, 1, 3, 1.0, 1.0,
-				GridBagConstraints.WEST, GridBagConstraints.BOTH, new Insets(3, 3, 3, 0));
-		
+		textField.setFocusable(true);
+		entryField.setFocusTraversalKeysEnabled(false);
+		textField.removeAllFocusListener();
+		textField.addFocusListener(this);
 
-		SwingUtil.addComponent(this, gbl, okBtn,
-				1, 0, 1, 1, 0.0, 1.0,
-				GridBagConstraints.NORTHEAST, GridBagConstraints.VERTICAL, new Insets(3, 0, 0, 3));
-		
+		SwingUtil.addComponent(this, gbl, entryField, 0, 0, 1, 3, 1.0, 1.0, GridBagConstraints.WEST,
+				GridBagConstraints.BOTH, new Insets(3, 3, 3, 0));
 
-//		SwingUtil.addComponent(this, gbl, cancelBtn,
-//				1, 1, 1, 1, 0.0, 1.0,
-//				GridBagConstraints.EAST, GridBagConstraints.VERTICAL, new Insets(0, 0, 0, 3));
+		SwingUtil.addComponent(this, gbl, okBtn, 1, 0, 1, 1, 0.0, 1.0, GridBagConstraints.NORTHEAST,
+				GridBagConstraints.VERTICAL, new Insets(3, 0, 0, 3));
 
-		SwingUtil.addComponent(this, gbl, clearBtn,
-				1, 1, 1, 1, 0.0, 1.0,
-				GridBagConstraints.SOUTHEAST, GridBagConstraints.VERTICAL, new Insets(0, 0, 3, 3));
-		
-		
+		// SwingUtil.addComponent(this, gbl, cancelBtn,
+		// 1, 1, 1, 1, 0.0, 1.0,
+		// GridBagConstraints.EAST, GridBagConstraints.VERTICAL, new Insets(0,
+		// 0, 0, 3));
+
+		SwingUtil.addComponent(this, gbl, clearBtn, 1, 1, 1, 1, 0.0, 1.0, GridBagConstraints.SOUTHEAST,
+				GridBagConstraints.VERTICAL, new Insets(0, 0, 3, 3));
+
 		MouseListener ml = new MouseListener() {
 			@Override
-			public void mouseReleased(MouseEvent arg0) {}
+			public void mouseReleased(MouseEvent arg0) {
+			}
+
 			@Override
-			public void mousePressed(MouseEvent arg0) {}
+			public void mousePressed(MouseEvent arg0) {
+			}
+
 			@Override
 			public void mouseExited(MouseEvent arg0) {
 
-//				switchToField();
+				// switchToField();
 			}
+
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
 
-//				switchToButtons();
+				// switchToButtons();
 			}
+
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				dispose();
 			}
 		};
-		
+
 		addMouseListener(ml);
 	}
-	
-	
 
-	
 	protected void setText() {
 		this.textField.setEnabled(true);
 		this.textField.setText(this.entryField.getText());
 		textField.repaint();
 	}
+
 	private void getText() {
-		if(textField.isEnabled()){
-			value = textField.getText();
-		} else {
-			value = "";
-		}
+		value = textField.getValueAsString("");
 		entryField.setText(value);
-		
-		if(!value.equals("")){
+
+		if (!value.equals("")) {
 			entryField.setSelectionStart(0);
 			entryField.setSelectionEnd(value.length());
 		}
 	}
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
+
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		
+
 	}
+
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
+
 	@Override
 	public void mousePressed(MouseEvent e) {
 		activate();
 	}
+
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	public void activate(){
-//		if (textField.isEnabled()) {
-			this.getText();
-//			if (dialog != null) {
-//				dispose();
-//			}
-			if(dialog == null){
-				if(owner instanceof Dialog){
-					dialog = new JDialog((Dialog) owner);
-				} else if(owner instanceof Frame) {
-					dialog = new JDialog((Frame) owner);
-				} else if(owner instanceof Window) {
-					dialog = new JDialog((Window) owner);
-				} else {
-					dialog = new JDialog(new JFrame());
-				}
+
+	public void activate() {
+		// if (textField.isEnabled()) {
+		this.getText();
+		// if (dialog != null) {
+		// dispose();
+		// }
+		if (dialog == null) {
+			if (owner instanceof Dialog) {
+				dialog = new JDialog((Dialog) owner);
+			} else if (owner instanceof Frame) {
+				dialog = new JDialog((Frame) owner);
+			} else if (owner instanceof Window) {
+				dialog = new JDialog((Window) owner);
+			} else {
+				dialog = new JDialog(new JFrame());
 			}
-			dialog.addWindowFocusListener(new WindowFocusListener() {
+		}
+		dialog.addWindowFocusListener(new WindowFocusListener() {
 
-				@Override
-				public void windowLostFocus(WindowEvent arg0) {
-					if(dialog != null)
-						dispose();
-				}
+			@Override
+			public void windowLostFocus(WindowEvent arg0) {
+				if (dialog != null)
+					dispose();
+			}
 
-				@Override
-				public void windowGainedFocus(WindowEvent arg0) {
-				}
-			});
-			dialog.setUndecorated(true);
-			dialog.setMinimumSize(new Dimension(minWidth, minHeight));
-			Point tfLoc = textField.getLocationOnScreen();
-			int finalWidth = textField.getWidth() * 2;
-			int finalHeight = textField.getHeight() * 2;
-			dialog.setSize(finalWidth, finalHeight);
-			dialog.setLocation(new Point((int) (tfLoc.x - finalWidth * 0.25),
-										 (int) (tfLoc.y - finalHeight * 0.25)));
-			dialog.add(this);
-			dialog.setModal(false);
-			dialog.setVisible(true);
-//		}
+			@Override
+			public void windowGainedFocus(WindowEvent arg0) {
+			}
+		});
+		dialog.setUndecorated(true);
+		dialog.setMinimumSize(new Dimension(minWidth, minHeight));
+		Point tfLoc = textField.getLocationOnScreen();
+		int finalWidth = textField.getWidth() * 2;
+		int finalHeight = textField.getHeight() * 2;
+//		set minimum height
+		finalHeight = finalHeight < 40 ? 40 : finalHeight;
+		
+		dialog.setSize(finalWidth, finalHeight);
+		dialog.setLocation(new Point((int) (tfLoc.x - finalWidth * 0.25), (int) (tfLoc.y - finalHeight * 0.25)));
+		dialog.add(this);
+		dialog.setModal(false);
+		dialog.setVisible(true);
+		// }
 	}
+
+
 	protected void dispose() {
 		this.dispose(false);
 	}
-	private void dispose(boolean unsetText){
-		if(unsetText){
-			if(initialValue != null){
+
+	private void dispose(boolean unsetText) {
+		if (unsetText) {
+			if (initialValue != null) {
 				this.textField.setEnabled(true);
 			} else {
 				this.textField.setEnabled(false);
@@ -339,20 +343,21 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 		} else {
 			this.setText();
 		}
-		if(dialog != null){
+		if (dialog != null) {
 			this.dialog.dispose();
 			this.dialog = null;
 		}
 	}
-	
+
 	@Override
 	public void focusGained(FocusEvent arg0) {
-		if(dialog == null){
-//			activate();
+		if (dialog == null) {
+			// activate();
 		}
 	}
+
 	@Override
 	public void focusLost(FocusEvent arg0) {
-//		dispose();
+		// dispose();
 	}
 }

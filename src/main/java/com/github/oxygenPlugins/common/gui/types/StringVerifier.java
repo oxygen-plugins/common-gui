@@ -18,15 +18,6 @@ public class StringVerifier extends ValidCharVerifier {
 	}
 	
 	@Override
-	public void setVerifier(JFormattedTextField field, Container owner) {
-		StringPanel sp = new StringPanel(field, owner);
-//		field.removeFocusListener(sp);
-		field.addMouseListener(sp);
-//		field.removeFocusListener(sp);
-//		field.addFocusListener(sp);
-		super.setVerifier(field, owner);
-	}
-	@Override
 	public _Verifier getNewInstance() {
 		return new StringVerifier();
 	}

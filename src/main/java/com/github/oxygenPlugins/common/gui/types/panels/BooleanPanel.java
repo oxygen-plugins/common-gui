@@ -39,6 +39,7 @@ import javax.swing.border.Border;
 
 import com.github.oxygenPlugins.common.gui.images.IconMap;
 import com.github.oxygenPlugins.common.gui.swing.SwingUtil;
+import com.github.oxygenPlugins.common.gui.types.LabelField;
 
 
 //
@@ -62,7 +63,7 @@ public class BooleanPanel extends JPanel implements MouseListener, FocusListener
 //	private final Border selectBorder = BorderFactory.createBevelBorder(
 //			BevelBorder.RAISED, new Color(30, 20, 120),
 //			new Color(110, 100, 200));
-	private JFormattedTextField textField;
+	private LabelField textField;
 	
 	private static String[] VALUE_LABELS = new String[]{"", "true", "false"};
 	private static String[] VALUE_LABELS_WON = new String[]{"true", "false"};
@@ -95,7 +96,7 @@ public class BooleanPanel extends JPanel implements MouseListener, FocusListener
 		}
 	}
 	
-	public BooleanPanel(final JFormattedTextField field, Container owner) {
+	public BooleanPanel(final LabelField field, Container owner) {
 		this.owner = owner;
 		this.textField = field;
 		textField.setHorizontalAlignment(JTextField.CENTER);

@@ -11,7 +11,6 @@ public class CalendarTimeVerifier implements _Verifier {
 
 	@Override
 	public void setVerifier(JFormattedTextField field, Container owner) {
-		field.addMouseListener(new CalendarTimePanel2(field, 11, owner, true));
 	}
 
 	@Override
@@ -21,8 +20,8 @@ public class CalendarTimeVerifier implements _Verifier {
 	}
 
 	@Override
-	public void setVerifier(JFormattedTextField field, Container owner, boolean entryHelp) {
-		setVerifier(field, owner);
+	public void setVerifier(LabelField field, Container owner) {
+		field.addMouseListener(new CalendarTimePanel2(field, 11, owner, true));
 	}
 
 }

@@ -81,10 +81,8 @@ public class IntegerAreaVerifier implements _Verifier, KeyListener {
 	}
 
 	@Override
-	public void setVerifier(JFormattedTextField field, Container owner, boolean entryHelp) {
-		if(entryHelp)
-			field.addMouseListener(new StringPanel(field, this, owner));
-		setVerifier(field, owner);
+	public void setVerifier(LabelField field, Container owner) {
+		field.addMouseListener(new StringPanel(field, this, owner));
 	}
 
 }

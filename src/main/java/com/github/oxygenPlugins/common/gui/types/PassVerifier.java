@@ -33,9 +33,9 @@ class PassVerifier extends InputVerifier {
 		JFormattedTextField stringField =  new JFormattedTextField();
 		JFormattedTextField intField = new JFormattedTextField();
 		JFormattedTextField dateField =  new JFormattedTextField();
-		VerifierFactory.addVerifier(new TypeConverter("abc"), stringField, frame);
-		VerifierFactory.addVerifier(new TypeConverter("int"), intField, frame);
-		VerifierFactory.addVerifier(new TypeConverter("date"), dateField, frame);
+//		VerifierFactory.addVerifier(new TypeConverter("abc"), stringField, frame);
+//		VerifierFactory.addVerifier(new TypeConverter("int"), intField, frame);
+//		VerifierFactory.addVerifier(new TypeConverter("date"), dateField, frame);
 		
 		
 		

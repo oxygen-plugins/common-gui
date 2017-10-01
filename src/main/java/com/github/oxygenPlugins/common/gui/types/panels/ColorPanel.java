@@ -29,6 +29,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.github.oxygenPlugins.common.gui.swing.SwingUtil;
+import com.github.oxygenPlugins.common.gui.types.LabelField;
 
 
 
@@ -41,15 +42,15 @@ public class ColorPanel extends JPanel implements MouseListener, _EntryPanel{
 	private final Border outlineBorder = BorderFactory.createBevelBorder(
 			BevelBorder.LOWERED, new Color(110, 110, 110), new Color(200, 200,
 					200));
-	private JFormattedTextField textField;
+	private LabelField textField;
 	private JLabel rgbCode = new JLabel();
 	private JSlider[] sliders = new JSlider[3];
 	private Color color;
 	private final Container owner;
-	public ColorPanel(JFormattedTextField field, Container owner){
+	public ColorPanel(LabelField field, Container owner){
 		this(field, field.getBackground(), owner);
 	}
-	public ColorPanel(final JFormattedTextField field, Color c, Container owner) {
+	public ColorPanel(final LabelField field, Color c, Container owner) {
 		this.textField = field;
 		this.owner = owner;
 		textField.setHorizontalAlignment(JTextField.CENTER);

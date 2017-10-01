@@ -4,8 +4,9 @@ import java.awt.event.FocusListener;
 
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
 
-public class FocusTraversalField extends JFormattedTextField {
+public class FocusTraversalField extends JLabel {
 	
 	private static final long serialVersionUID = 1L;
 	private JComponent nextComponent = null;
@@ -41,6 +42,9 @@ public class FocusTraversalField extends JFormattedTextField {
 
 	public void setPrevComponent(JComponent prevComp) {
 		this.prevComponent = prevComp;
+		if(prevComp instanceof FocusTraversalField){
+			((FocusTraversalField) prevComp).setNextComponent(this);
+		}
 	}
 
 	public void parentFocus(){

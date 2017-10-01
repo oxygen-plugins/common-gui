@@ -20,9 +20,6 @@ public class MultiChoiceVerifier extends ValidCharVerifier {
 	
 	@Override
 	public void setVerifier(JFormattedTextField field, Container owner) {
-		MultiChoicePanel sp = new MultiChoicePanel(field, owner, this.values, this.isNullSelectable);
-		field.addMouseListener(sp);
-		super.setVerifier(field, owner);
 	}
 	@Override
 	public _Verifier getNewInstance() {

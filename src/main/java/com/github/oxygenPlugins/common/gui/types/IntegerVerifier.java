@@ -21,15 +21,12 @@ public class IntegerVerifier extends ValidCharVerifier {
 	
 	@Override
 	public void setVerifier(JFormattedTextField field, Container owner) {
-		setVerifier(field, owner, true);
+		super.setVerifier(field, owner);
 	}
 	
 	@Override
-	public void setVerifier(JFormattedTextField field, Container owner, boolean entryHelp) {
-		if(entryHelp){
+	public void setVerifier(LabelField field, Container owner) {
 			field.addMouseListener(new StringPanel(field, this, owner));
-		}
-		super.setVerifier(field, owner);
 	}
 	
 	@Override

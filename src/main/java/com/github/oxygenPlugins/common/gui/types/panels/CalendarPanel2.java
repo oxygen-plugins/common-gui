@@ -38,12 +38,13 @@ import org.joda.time.format.DateTimeFormatter;
 
 import com.github.oxygenPlugins.common.gui.images.IconMap;
 import com.github.oxygenPlugins.common.gui.swing.SwingUtil;
+import com.github.oxygenPlugins.common.gui.types.LabelField;
 
 
-public class CalendarPanel2 extends JPanel implements MouseListener, _EntryPanel {
+public class CalendarPanel2 extends JPanel implements _EntryPanel {
 	private static final long serialVersionUID = -4261661006435142610L;
 	private final JDialog dialog;
-	private final JTextField textField;
+	private final LabelField textField;
 	
 	private final Font defFont;
 	
@@ -64,7 +65,7 @@ public class CalendarPanel2 extends JPanel implements MouseListener, _EntryPanel
 			BevelBorder.RAISED, new Color(30, 20, 120),
 			new Color(110, 100, 200));
 
-	public CalendarPanel2(JFormattedTextField field, int fontSize, Container owner) {
+	public CalendarPanel2(LabelField field, int fontSize, Container owner) {
 		
 		if(owner instanceof Dialog){
 			dialog = new JDialog((Dialog) owner);
@@ -100,8 +101,6 @@ public class CalendarPanel2 extends JPanel implements MouseListener, _EntryPanel
 			@Override
 			public void focusGained(FocusEvent arg0) {
 //				textField.setEnabled(true);
-				
-				System.out.println("hello calendar field!");
 			}
 		});
 		// this.setBackground(Color.RED);
@@ -172,7 +171,7 @@ public class CalendarPanel2 extends JPanel implements MouseListener, _EntryPanel
 //		dialog.pack();
 		textField.setEnabled(false);
 	}
-
+	
 	private Point getDialogBounds(){
 
 		Point tfLoc = textField.getLocationOnScreen();

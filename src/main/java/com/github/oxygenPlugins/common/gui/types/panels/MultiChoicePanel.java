@@ -41,6 +41,7 @@ import javax.swing.border.Border;
 
 import com.github.oxygenPlugins.common.gui.images.IconMap;
 import com.github.oxygenPlugins.common.gui.swing.SwingUtil;
+import com.github.oxygenPlugins.common.gui.types.LabelField;
 
 //
 public class MultiChoicePanel extends JPanel implements MouseListener, FocusListener, _EntryPanel {
@@ -48,7 +49,7 @@ public class MultiChoicePanel extends JPanel implements MouseListener, FocusList
 	private final GridBagLayout gbl;
 	
 	private final int minWidth = 100;
-	private final int minHeight = 0;
+	private final int minHeight = 30;
 	
 	private final int maxHeight = 30;
 	private final int maxWidth = 0;
@@ -63,7 +64,7 @@ public class MultiChoicePanel extends JPanel implements MouseListener, FocusList
 //	private final Border selectBorder = BorderFactory.createBevelBorder(
 //			BevelBorder.RAISED, new Color(30, 20, 120),
 //			new Color(110, 100, 200));
-	private JFormattedTextField textField;
+	private LabelField textField;
 	
 	private final ArrayList<String> valueList;
 	
@@ -80,8 +81,6 @@ public class MultiChoicePanel extends JPanel implements MouseListener, FocusList
 	private final JButton clearBtn;
 	private final boolean hasNull; 
 	
-	private final String fallbackText;
-	private final String nullText = "(no value)";
 	
 	private class PanelButton extends JButton{
 		private static final long serialVersionUID = 1699184718806511284L;
@@ -95,10 +94,10 @@ public class MultiChoicePanel extends JPanel implements MouseListener, FocusList
 			super(text);
 		}
 	}
-	public MultiChoicePanel(final JFormattedTextField field, Container owner, String[] values) {
+	public MultiChoicePanel(final LabelField field, Container owner, String[] values) {
 		this(field, owner, values, false);
 	}
-	public MultiChoicePanel(final JFormattedTextField field, Container owner, String[] values, boolean isNullSelectable) {
+	public MultiChoicePanel(final LabelField field, Container owner, String[] values, boolean isNullSelectable) {
 		this.owner = owner;
 		this.textField = field;
 		textField.setHorizontalAlignment(JTextField.CENTER);
@@ -107,12 +106,11 @@ public class MultiChoicePanel extends JPanel implements MouseListener, FocusList
 		this.hasNull  = !field.isEnabled();
 		
 		if(isNullSelectable && hasNull){
-			valueList.add(nullText);
+			valueList.add(LabelField.NULL_LABEL);
 		}
 		Collections.addAll(this.valueList, values);
 		
-		fallbackText = field.getText();
-		initialValue = this.valueList.indexOf(fallbackText);
+		initialValue = this.valueList.indexOf(field.getText());
 		value = initialValue;
 		
 //		if(field.isEnabled()){
@@ -282,7 +280,7 @@ public class MultiChoicePanel extends JPanel implements MouseListener, FocusList
 			value = convert(text);
 		} else {
 			value = 0;
-			text = nullText;
+			text = LabelField.NULL_LABEL;
 		}
 		entryBox.setSelectedItem(text);
 	}
@@ -290,7 +288,7 @@ public class MultiChoicePanel extends JPanel implements MouseListener, FocusList
 	private boolean isNull(int value){
 		if(value >= valueList.size())
 			return true;
-		if(entryBox.getItemAt(value) == this.nullText)
+		if(entryBox.getItemAt(value) == LabelField.NULL_LABEL)
 			return true;
 		if(value < 0)
 			return true;
@@ -299,7 +297,7 @@ public class MultiChoicePanel extends JPanel implements MouseListener, FocusList
 	
 	private String convert(int value){
 		if(isNull(value))
-			return fallbackText;
+			return null;
 		return valueList.get(value);
 	}
 	private int convert(String valueString){
@@ -372,6 +370,9 @@ public class MultiChoicePanel extends JPanel implements MouseListener, FocusList
 			int finalHeight = textField.getHeight() * 2;
 			
 			finalHeight = this.maxHeight > 0 && this.maxHeight < finalHeight ? this.maxHeight : finalHeight;
+
+			finalHeight = this.minHeight > 0 && this.minHeight > finalHeight ? this.minHeight : finalHeight;
+			
 			finalWidth = this.maxWidth > 0 && this.maxWidth < finalWidth ? this.maxWidth : finalWidth;
 			
 			dialog.setMaximumSize(new Dimension(finalWidth, finalHeight));
@@ -390,11 +391,6 @@ public class MultiChoicePanel extends JPanel implements MouseListener, FocusList
 	}
 	private void dispose(boolean unsetText){
 		if(unsetText){
-			if(hasNull){
-				this.textField.setEnabled(false);
-			} else {
-				this.textField.setEnabled(true);
-			}
 			this.textField.setText(convert(initialValue));
 			this.textField.repaint();
 		} else {

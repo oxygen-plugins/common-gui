@@ -36,13 +36,14 @@ import org.joda.time.format.DateTimeFormatter;
 
 import com.github.oxygenPlugins.common.gui.images.IconMap;
 import com.github.oxygenPlugins.common.gui.swing.SwingUtil;
+import com.github.oxygenPlugins.common.gui.types.LabelField;
 
 
 
 public class CalendarTimePanel2 extends JPanel implements MouseListener, _EntryPanel {
 	private static final long serialVersionUID = -4261661006435142610L;
 	private final JDialog dialog;
-	private final JTextField textField;
+	private final LabelField textField;
 	
 	private final Font defFont;
 	
@@ -63,10 +64,10 @@ public class CalendarTimePanel2 extends JPanel implements MouseListener, _EntryP
 			BevelBorder.RAISED, new Color(30, 20, 120),
 			new Color(110, 100, 200));
 
-	public CalendarTimePanel2(JFormattedTextField field, int fontSize, Container owner) {
+	public CalendarTimePanel2(LabelField field, int fontSize, Container owner) {
 		this(field, fontSize, owner, false);
 	}
-	public CalendarTimePanel2(JFormattedTextField field, int fontSize, Container owner, boolean hasTime) {
+	public CalendarTimePanel2(LabelField field, int fontSize, Container owner, boolean hasTime) {
 		
 		if(owner instanceof Dialog){
 			dialog = new JDialog((Dialog) owner);

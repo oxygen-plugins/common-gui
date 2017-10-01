@@ -20,13 +20,12 @@ public class BooleanVerifier extends ValidCharVerifier {
 	}
 	
 	@Override
-	public void setVerifier(JFormattedTextField field, Container owner) {
+	public void setVerifier(LabelField field, Container owner) {
 		BooleanPanel2 sp = new BooleanPanel2(field, owner);
 //		field.removeFocusListener(sp);
 		field.addMouseListener(sp);
 //		field.removeFocusListener(sp);
 //		field.addFocusListener(sp);
-		super.setVerifier(field, owner);
 	}
 	@Override
 	public _Verifier getNewInstance() {

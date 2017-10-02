@@ -2,6 +2,7 @@ package com.github.oxygenPlugins.common.gui.types;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Font;
 
 import javax.swing.JComponent;
@@ -59,6 +60,7 @@ public class LabelField extends FocusTraversalField {
 				this.setStyle(Font.ITALIC);
 				this.setBackground(Color.WHITE);
 			} else if (value == null) {
+				this.setStyle(Font.PLAIN);
 				this.setBackground(Color.RED);
 			} else {
 				this.setStyle(Font.PLAIN);
@@ -67,12 +69,32 @@ public class LabelField extends FocusTraversalField {
 		}
 
 		super.setText(text);
+		
+		checkMinimumSize();
+	}
+	
+	@Override
+	public void setMinimumSize(Dimension minimumSize) {
+		// TODO Auto-generated method stub
+		super.setMinimumSize(minimumSize);
+		
+		checkMinimumSize();
 	}
 
+	private void checkMinimumSize() {
+		int w = getWidth();
+		int h = getHeight();
+		Dimension minD = getMinimumSize();
+		w = minD.width > w ? minD.width : w;
+		h = minD.height > h ? minD.height : h;
+		
+		this.setPreferredSize(new Dimension(w, h));
+		
+	}
 	private void setStyle(int style) {
 		Font FONT = new JLabel().getFont();
 		if (FONT != null) {
-			Font font = new Font("Arial", style, 9);
+			Font font = new Font(FONT.getName(), style, FONT.getSize());
 			this.setFont(font);
 		}
 	}

@@ -175,23 +175,20 @@ public class CalendarPanel2 extends JPanel implements _EntryPanel {
 	private Point getDialogBounds(){
 
 		Point tfLoc = textField.getLocationOnScreen();
-		Dimension screen = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+		Point prefLoc = new Point(tfLoc.x, tfLoc.y);
 		
-		int x = tfLoc.x + textField.getWidth() - dialog.getWidth();
-		x = x < 0 ? 0 : x;
+		prefLoc.y = tfLoc.y + textField.getHeight();
+		prefLoc.x = tfLoc.x + textField.getWidth() - dialog.getWidth();
 		
-		int y = tfLoc.y + textField.getHeight();
-		y = y < 0 ? 0 : y;
+		Point onScreenLoc = SwingUtil.moveOnScreen(prefLoc, dialog.getWidth(), dialog.getHeight());
 		
-		if((x + dialog.getWidth() ) > screen.width){
-			x = screen.width - dialog.getWidth();
-		}
-		if((y + dialog.getHeight()) > screen.height){
-			y = tfLoc.y - dialog.getHeight();
-		}
+		onScreenLoc.y = prefLoc.y > onScreenLoc.y ? tfLoc.y - dialog.getHeight() : onScreenLoc.y;
 		
-		return new Point(x, y);
+		return onScreenLoc;
+		
 	}
+	
+
 	
 
 	@Override

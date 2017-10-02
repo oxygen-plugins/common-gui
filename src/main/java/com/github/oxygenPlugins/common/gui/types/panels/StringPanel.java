@@ -282,6 +282,7 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 	}
 
 	public void activate() {
+		
 		// if (textField.isEnabled()) {
 		this.getText();
 		// if (dialog != null) {
@@ -312,14 +313,21 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 		});
 		dialog.setUndecorated(true);
 		dialog.setMinimumSize(new Dimension(minWidth, minHeight));
+
 		Point tfLoc = textField.getLocationOnScreen();
 		int finalWidth = textField.getWidth() * 2;
 		int finalHeight = textField.getHeight() * 2;
 //		set minimum height
 		finalHeight = finalHeight < 40 ? 40 : finalHeight;
+
+		Point dialogLocLT = new Point((int) (tfLoc.x - finalWidth * 0.25), (int) (tfLoc.y - finalHeight * 0.25));
+		
+		
+		
+		dialogLocLT = SwingUtil.moveOnScreen(dialogLocLT, finalWidth, finalHeight);
 		
 		dialog.setSize(finalWidth, finalHeight);
-		dialog.setLocation(new Point((int) (tfLoc.x - finalWidth * 0.25), (int) (tfLoc.y - finalHeight * 0.25)));
+		dialog.setLocation(dialogLocLT);
 		dialog.add(this);
 		dialog.setModal(false);
 		dialog.setVisible(true);

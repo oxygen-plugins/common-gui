@@ -32,7 +32,6 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -378,8 +377,10 @@ public class MultiChoicePanel extends JPanel implements MouseListener, FocusList
 			dialog.setMaximumSize(new Dimension(finalWidth, finalHeight));
 
 			dialog.setSize(finalWidth, finalHeight);
-			dialog.setLocation(new Point((int) (tfLoc.x - finalWidth * 0.25),
-										 (int) (tfLoc.y - finalHeight * 0.25)));
+			Point finalLoc = new Point((int) (tfLoc.x - finalWidth * 0.25),
+										 (int) (tfLoc.y - finalHeight * 0.25));
+			finalLoc = SwingUtil.moveOnScreen(finalLoc, finalWidth, finalHeight);
+			dialog.setLocation(finalLoc);
 			dialog.add(this);
 			dialog.setModal(false);
 			dialog.setVisible(true);

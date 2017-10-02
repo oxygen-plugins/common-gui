@@ -182,9 +182,16 @@ public class TimePanel extends JPanel implements MouseListener, _EntryPanel {
 	private Point getDialogBounds() {
 
 		Point tfLoc = textField.getLocationOnScreen();
-
-		return new Point((int) (tfLoc.x - dialog.getWidth() * 0.25),
-				(int) (tfLoc.y - dialog.getHeight() * 0.25));
+		Point prefLoc = new Point(tfLoc.x, tfLoc.y);
+		
+		prefLoc.y = tfLoc.y + textField.getHeight();
+		prefLoc.x = tfLoc.x + textField.getWidth() - dialog.getWidth();
+		
+		Point onScreenLoc = SwingUtil.moveOnScreen(prefLoc, dialog.getWidth(), dialog.getHeight());
+		
+		onScreenLoc.y = prefLoc.y > onScreenLoc.y ? tfLoc.y - dialog.getHeight() : onScreenLoc.y;
+		
+		return onScreenLoc;
 	}
 
 	@Override

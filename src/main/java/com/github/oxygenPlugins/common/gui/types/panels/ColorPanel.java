@@ -192,19 +192,31 @@ public class ColorPanel extends JPanel implements MouseListener, _EntryPanel{
 			dialog.setUndecorated(true);
 			dialog.setMinimumSize(new Dimension(minWidth, minHeight));
 			Point tfLoc = textField.getLocationOnScreen();
+			
+			
 			dialog.setSize(textField.getWidth(), textField.getWidth());
-			dialog.setLocation(new Point(tfLoc.x + textField.getWidth()
-					- dialog.getWidth(), tfLoc.y + textField.getHeight()));
+			dialog.setLocation(getDialogBounds());
 			dialog.add(this);
 			dialog.setModal(false);
 			dialog.setVisible(true);
 		}
 	}
-//	private Frame getFrame(Component c) {
-//		if (c instanceof Frame)
-//			return (Frame) c;
-//		return getFrame(c.getParent());
-//	}
+
+	private Point getDialogBounds(){
+
+		Point tfLoc = textField.getLocationOnScreen();
+		Point prefLoc = new Point(tfLoc.x, tfLoc.y);
+		
+		prefLoc.y = tfLoc.y + textField.getHeight();
+		prefLoc.x = tfLoc.x + textField.getWidth() - dialog.getWidth();
+		
+		Point onScreenLoc = SwingUtil.moveOnScreen(prefLoc, dialog.getWidth(), dialog.getHeight());
+		
+		onScreenLoc.y = prefLoc.y > onScreenLoc.y ? tfLoc.y - dialog.getHeight() : onScreenLoc.y;
+		
+		return onScreenLoc;
+	}
+	
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub

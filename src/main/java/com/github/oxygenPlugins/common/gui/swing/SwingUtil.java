@@ -14,8 +14,6 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.util.ArrayList;
 
-import javax.swing.JPanel;
-
 public class SwingUtil {
 
 	public static void addComponent(final Container cont, final GridBagLayout gbl, final Component c, final int x,
@@ -131,7 +129,6 @@ public class SwingUtil {
 		Point botLeft = new Point(topLeft.x, topLeft.y + height);
 		Point botRight = new Point(topLeft.x + width, topLeft.y + height);
 
-		Point onScreenP = new Point(topLeft.x, topLeft.y);
 
 		ArrayList<Point> visiblePoints = new ArrayList<Point>();
 		ArrayList<Point> hiddenPoints = new ArrayList<Point>();

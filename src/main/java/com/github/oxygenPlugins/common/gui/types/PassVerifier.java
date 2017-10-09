@@ -15,7 +15,6 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import com.github.oxygenPlugins.common.gui.swing.SwingUtil;
-import com.github.oxygenPlugins.common.gui.types.converter.TypeConverter;
 
 
 

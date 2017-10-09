@@ -17,7 +17,6 @@ import java.awt.event.WindowFocusListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JDialog;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -191,7 +190,6 @@ public class ColorPanel extends JPanel implements MouseListener, _EntryPanel{
 			});
 			dialog.setUndecorated(true);
 			dialog.setMinimumSize(new Dimension(minWidth, minHeight));
-			Point tfLoc = textField.getLocationOnScreen();
 			
 			
 			dialog.setSize(textField.getWidth(), textField.getWidth());

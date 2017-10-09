@@ -1,11 +1,5 @@
 package com.github.oxygenPlugins.common.gui.types;
 
-import java.awt.Container;
-
-import javax.swing.JFormattedTextField;
-
-import com.github.oxygenPlugins.common.gui.types.panels.StringPanel;
-
 public class StringVerifier extends ValidCharVerifier {
 	public StringVerifier() {
 		this("");

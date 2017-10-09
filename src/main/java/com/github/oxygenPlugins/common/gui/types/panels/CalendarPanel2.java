@@ -14,6 +14,8 @@ import java.awt.Point;
 import java.awt.Window;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
@@ -24,11 +26,9 @@ import java.util.Locale;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JDialog;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 
@@ -91,6 +91,66 @@ public class CalendarPanel2 extends JPanel implements _EntryPanel {
 		buildCalendar(actuellDat, actuellDat);
 		
 		this.textField.setFocusable(true);
+		
+		dialog.setFocusTraversalKeysEnabled(false);
+		dialog.addKeyListener(new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				switch (e.getKeyCode()) {
+				case KeyEvent.VK_TAB:
+					if (e.isShiftDown()) {
+						textField.prevFocus();
+					} else {
+						textField.myNextFocus();
+					}
+					break;
+				case KeyEvent.VK_UP:
+					DateTime minusWeek = CalendarPanel2.this.actuellDat.minusWeeks(1);
+					buildCalendar(minusWeek, minusWeek);
+					break;
+				case KeyEvent.VK_DOWN:
+					DateTime plusWeek = CalendarPanel2.this.actuellDat.plusWeeks(1);
+					buildCalendar(plusWeek, plusWeek);
+					break;
+				case KeyEvent.VK_RIGHT:
+					DateTime plusDay = CalendarPanel2.this.actuellDat.plusDays(1);
+					buildCalendar(plusDay, plusDay);
+					break;
+				case KeyEvent.VK_LEFT:
+					DateTime minusDay = CalendarPanel2.this.actuellDat.minusDays(1);
+					buildCalendar(minusDay, minusDay);
+					break;
+				case KeyEvent.VK_PAGE_DOWN:
+					DateTime plusYear = CalendarPanel2.this.actuellDat.plusYears(1);
+					buildCalendar(plusYear, plusYear);
+					break;
+				case KeyEvent.VK_PAGE_UP:
+					DateTime minYear = CalendarPanel2.this.actuellDat.minusYears(1);
+					buildCalendar(minYear, minYear);
+					break;
+				case KeyEvent.VK_ENTER:
+					confirmDate(CalendarPanel2.this.actuellDat);
+					break;
+				case KeyEvent.VK_SPACE:
+					confirmDate(CalendarPanel2.this.actuellDat, false);
+					break;
+				case KeyEvent.VK_ESCAPE:
+					dispose();
+					break;
+				default:
+					break;
+				}
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+			}
+		});
+		
 		this.textField.addFocusListener(new FocusListener() {
 			
 			@Override
@@ -158,6 +218,8 @@ public class CalendarPanel2 extends JPanel implements _EntryPanel {
 	
 	
 	
+	private DateTime actuellDat = null;
+	
 	public void activate() {
 		String text = this.textField.getText();
 		DateTime actuellDat = convert(text);
@@ -214,6 +276,7 @@ public class CalendarPanel2 extends JPanel implements _EntryPanel {
 	private void buildCalendar(final DateTime actuell,
 			final DateTime selectedDate) {
 		clear();
+		this.actuellDat = actuell;
 		this.setBorder(defaultBorder);
 		contentPanel = new JPanel();
 		contentPanel.setLayout(gbl);
@@ -462,10 +525,13 @@ public class CalendarPanel2 extends JPanel implements _EntryPanel {
 			this.setOpaque(true);
 		}
 	}
-
 	private void confirmDate(DateTime date) {
+		confirmDate(date, true);
+	}
+	private void confirmDate(DateTime date, boolean dispose) {
 		this.textField.setText(convert(date));
-		dispose();
+		if(dispose)
+			dispose();
 	}
 
 	static DateTimeFormatter FMT = DateTimeFormat.forPattern("yyyy-MM-dd");

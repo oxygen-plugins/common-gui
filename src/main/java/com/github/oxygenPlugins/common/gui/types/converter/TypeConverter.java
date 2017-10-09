@@ -4,8 +4,10 @@ import java.util.HashMap;
 
 import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.type.ValidationException;
+import net.sf.saxon.value.AtomicValue;
 import net.sf.saxon.value.DateTimeValue;
 import net.sf.saxon.value.DateValue;
+import net.sf.saxon.value.Int64Value;
 import net.sf.saxon.value.TimeValue;
 
 @SuppressWarnings("rawtypes")
@@ -39,11 +41,21 @@ public class TypeConverter {
 				result = getClass(type).cast(getDate(value));
 			} else if (type.equals("xs:dateTime")) {
 				result = getClass(type).cast(getDateTime(value));
-			} else if (type.equals("xs:integer") || type.equals("xs:int") || type.equals("xs:unsignedInt")) {
+			} else if (type.equals("xs:short")){
+				short val = Short.parseShort(value);
+				result = val;
+			} else if (type.equals("xs:long")){
+				long val = Long.parseLong(value);
+				result = val;
+			} else if (type.equals("xs:integer") || type.equals("xs:short")
+					|| type.equals("xs:unsignedInt")) {
 				int valInt = value.equals("") ? 0 : Integer.valueOf(value);
 				result = getClass(type).cast(valInt);
-			} else if (type.equals("xs:short") || type.equals("xs:long") || type.equals("xs:decimal")
-					|| type.equals("xs:unsignedShort")) {
+			} else if (type.equals("xs:int")){
+				int val = Integer.valueOf(value);
+				result = val;
+			} else if ( type.equals("xs:decimal")
+					|| type.equals("xs:unsignedShort") || type.equals("xs:double")) {
 				double valDouble = value.equals("") ? 0.0 : Double.parseDouble(value);
 				result = getClass(type).cast(valDouble);
 			} else {
@@ -91,11 +103,12 @@ public class TypeConverter {
 	static {
 		typeVerifierMap.put(null, String.class);
 		typeVerifierMap.put("xs:string", String.class);
-		typeVerifierMap.put("xs:int", Integer.class);
+		typeVerifierMap.put("xs:int", int.class);
 		typeVerifierMap.put("xs:integer", Integer.class);
-		typeVerifierMap.put("xs:short", Double.class);
-		typeVerifierMap.put("xs:long", Double.class);
+		typeVerifierMap.put("xs:short", Integer.class);
+		typeVerifierMap.put("xs:long", Long.class);
 		typeVerifierMap.put("xs:decimal", Double.class);
+		typeVerifierMap.put("xs:double", Double.class);
 		typeVerifierMap.put("xs:unsignedInt", Integer.class);
 		typeVerifierMap.put("xs:unsignedShort", Double.class);
 		typeVerifierMap.put("sqf:color", String.class);

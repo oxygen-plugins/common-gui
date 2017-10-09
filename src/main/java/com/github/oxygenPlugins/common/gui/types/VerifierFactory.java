@@ -1,15 +1,12 @@
 package com.github.oxygenPlugins.common.gui.types;
 
 import java.awt.Container;
-import java.awt.event.MouseListener;
 import java.util.HashMap;
 
 import javax.swing.JComponent;
-import javax.swing.JFormattedTextField;
 
 import com.github.oxygenPlugins.common.gui.types.converter.EnumTypeConverter;
 import com.github.oxygenPlugins.common.gui.types.converter.TypeConverter;
-import com.github.oxygenPlugins.common.gui.types.panels._EntryPanel;
 
 
 public class VerifierFactory {
@@ -64,6 +61,7 @@ public class VerifierFactory {
 		typeVerifierMap.put("xs:short", new IntegerVerifier("","+-"));
 		typeVerifierMap.put("xs:long", new IntegerVerifier("","+-"));
 		typeVerifierMap.put("xs:decimal", new IntegerVerifier(".","+-"));
+		typeVerifierMap.put("xs:double", new IntegerVerifier(".","+-"));
 		typeVerifierMap.put("xs:unsignedInt", new IntegerVerifier("","+"));
 		typeVerifierMap.put("xs:unsignedShort", new IntegerVerifier("","+"));
 		typeVerifierMap.put("sqf:color", new ColorVerifier());

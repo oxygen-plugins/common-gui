@@ -9,7 +9,6 @@ import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Label;
 import java.awt.Point;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -34,6 +33,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
+
+import org.joda.time.DateTime;
 
 import com.github.oxygenPlugins.common.gui.images.IconMap;
 import com.github.oxygenPlugins.common.gui.swing.SwingUtil;
@@ -93,14 +94,10 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 	public StringPanel(final LabelField field, Container owner) {
 		this.owner = owner;
 		this.textField = field;
-		textField.setHorizontalAlignment(JTextField.CENTER);
-		if (field.isEnabled()) {
-			initialValue = field.getText();
-			value = initialValue;
-		} else {
-			initialValue = null;
-			value = null;
-		}
+		
+		initialValue = field.getValueAsString();
+		value = initialValue;
+
 		setBorder(outlineBorder);
 		setBackground(Color.WHITE);
 		gbl = new GridBagLayout();
@@ -167,7 +164,6 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 			public void keyReleased(KeyEvent e) {
 				if (e.getKeyChar() == '\n') {
 					dispose();
-					textField.nextFocus();
 				} else if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
 					dispose(true);
 					textField.parentFocus();
@@ -178,8 +174,14 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 					if (e.isShiftDown()) {
 						textField.prevFocus();
 					} else {
-						textField.nextFocus();
+						textField.myNextFocus();
 					}
+				} else if (e.getKeyCode() == KeyEvent.VK_UP){
+					dispose();
+					textField.prevFocus();
+				} else if(e.getKeyCode() == KeyEvent.VK_DOWN){
+					dispose();
+					textField.myNextFocus();
 				}
 			}
 
@@ -238,7 +240,6 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 	}
 
 	protected void setText() {
-		this.textField.setEnabled(true);
 		this.textField.setText(this.entryField.getText());
 		textField.repaint();
 	}
@@ -280,57 +281,59 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 		// TODO Auto-generated method stub
 
 	}
-
-	public void activate() {
-		
-		// if (textField.isEnabled()) {
-		this.getText();
-		// if (dialog != null) {
-		// dispose();
-		// }
-		if (dialog == null) {
-			if (owner instanceof Dialog) {
-				dialog = new JDialog((Dialog) owner);
-			} else if (owner instanceof Frame) {
-				dialog = new JDialog((Frame) owner);
-			} else if (owner instanceof Window) {
-				dialog = new JDialog((Window) owner);
-			} else {
-				dialog = new JDialog(new JFrame());
+	
+	public synchronized void activate() {
+		synchronized (this) {
+			
+			this.getText();
+			// if (dialog != null) {
+			// dispose();
+			// }
+			if (dialog == null) {
+				if (owner instanceof Dialog) {
+					dialog = new JDialog((Dialog) owner);
+				} else if (owner instanceof Frame) {
+					dialog = new JDialog((Frame) owner);
+				} else if (owner instanceof Window) {
+					dialog = new JDialog((Window) owner);
+				} else {
+					dialog = new JDialog(new JFrame());
+				}
 			}
+			dialog.addWindowFocusListener(new WindowFocusListener() {
+
+				@Override
+				public void windowLostFocus(WindowEvent we) {
+					if (dialog != null){
+						dispose();
+					} else {
+					}
+				}
+
+				@Override
+				public void windowGainedFocus(WindowEvent arg0) {
+				}
+			});
+			dialog.setUndecorated(true);
+			dialog.setMinimumSize(new Dimension(minWidth, minHeight));
+
+			Point tfLoc = textField.getLocationOnScreen();
+			int finalWidth = textField.getWidth() * 2;
+			int finalHeight = textField.getHeight() * 2;
+			// set minimum height
+			finalHeight = finalHeight < 40 ? 40 : finalHeight;
+
+			Point dialogLocLT = new Point((int) (tfLoc.x - finalWidth * 0.25), (int) (tfLoc.y - finalHeight * 0.25));
+
+			dialogLocLT = SwingUtil.moveOnScreen(dialogLocLT, finalWidth, finalHeight);
+
+			dialog.setSize(finalWidth, finalHeight);
+			dialog.setLocation(dialogLocLT);
+			dialog.add(this);
+			dialog.setModal(false);
+			dialog.setVisible(true);
 		}
-		dialog.addWindowFocusListener(new WindowFocusListener() {
-
-			@Override
-			public void windowLostFocus(WindowEvent arg0) {
-				if (dialog != null)
-					dispose();
-			}
-
-			@Override
-			public void windowGainedFocus(WindowEvent arg0) {
-			}
-		});
-		dialog.setUndecorated(true);
-		dialog.setMinimumSize(new Dimension(minWidth, minHeight));
-
-		Point tfLoc = textField.getLocationOnScreen();
-		int finalWidth = textField.getWidth() * 2;
-		int finalHeight = textField.getHeight() * 2;
-//		set minimum height
-		finalHeight = finalHeight < 40 ? 40 : finalHeight;
-
-		Point dialogLocLT = new Point((int) (tfLoc.x - finalWidth * 0.25), (int) (tfLoc.y - finalHeight * 0.25));
-		
-		
-		
-		dialogLocLT = SwingUtil.moveOnScreen(dialogLocLT, finalWidth, finalHeight);
-		
-		dialog.setSize(finalWidth, finalHeight);
-		dialog.setLocation(dialogLocLT);
-		dialog.add(this);
-		dialog.setModal(false);
-		dialog.setVisible(true);
+		// if (textField.isEnabled()) {
 		// }
 	}
 
@@ -341,11 +344,6 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 
 	private void dispose(boolean unsetText) {
 		if (unsetText) {
-			if (initialValue != null) {
-				this.textField.setEnabled(true);
-			} else {
-				this.textField.setEnabled(false);
-			}
 			this.textField.setText(initialValue);
 			this.textField.repaint();
 		} else {
@@ -355,6 +353,7 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 			this.dialog.dispose();
 			this.dialog = null;
 		}
+		this.textField.parentFocus();
 	}
 
 	@Override

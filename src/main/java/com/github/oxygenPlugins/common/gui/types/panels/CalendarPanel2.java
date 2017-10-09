@@ -14,6 +14,8 @@ import java.awt.Point;
 import java.awt.Window;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
@@ -24,11 +26,9 @@ import java.util.Locale;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JDialog;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 
@@ -38,12 +38,13 @@ import org.joda.time.format.DateTimeFormatter;
 
 import com.github.oxygenPlugins.common.gui.images.IconMap;
 import com.github.oxygenPlugins.common.gui.swing.SwingUtil;
+import com.github.oxygenPlugins.common.gui.types.LabelField;
 
 
-public class CalendarPanel2 extends JPanel implements MouseListener, _EntryPanel {
+public class CalendarPanel2 extends JPanel implements _EntryPanel {
 	private static final long serialVersionUID = -4261661006435142610L;
 	private final JDialog dialog;
-	private final JTextField textField;
+	private final LabelField textField;
 	
 	private final Font defFont;
 	
@@ -64,7 +65,7 @@ public class CalendarPanel2 extends JPanel implements MouseListener, _EntryPanel
 			BevelBorder.RAISED, new Color(30, 20, 120),
 			new Color(110, 100, 200));
 
-	public CalendarPanel2(JFormattedTextField field, int fontSize, Container owner) {
+	public CalendarPanel2(LabelField field, int fontSize, Container owner) {
 		
 		if(owner instanceof Dialog){
 			dialog = new JDialog((Dialog) owner);
@@ -90,6 +91,66 @@ public class CalendarPanel2 extends JPanel implements MouseListener, _EntryPanel
 		buildCalendar(actuellDat, actuellDat);
 		
 		this.textField.setFocusable(true);
+		
+		dialog.setFocusTraversalKeysEnabled(false);
+		dialog.addKeyListener(new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				switch (e.getKeyCode()) {
+				case KeyEvent.VK_TAB:
+					if (e.isShiftDown()) {
+						textField.prevFocus();
+					} else {
+						textField.myNextFocus();
+					}
+					break;
+				case KeyEvent.VK_UP:
+					DateTime minusWeek = CalendarPanel2.this.actuellDat.minusWeeks(1);
+					buildCalendar(minusWeek, minusWeek);
+					break;
+				case KeyEvent.VK_DOWN:
+					DateTime plusWeek = CalendarPanel2.this.actuellDat.plusWeeks(1);
+					buildCalendar(plusWeek, plusWeek);
+					break;
+				case KeyEvent.VK_RIGHT:
+					DateTime plusDay = CalendarPanel2.this.actuellDat.plusDays(1);
+					buildCalendar(plusDay, plusDay);
+					break;
+				case KeyEvent.VK_LEFT:
+					DateTime minusDay = CalendarPanel2.this.actuellDat.minusDays(1);
+					buildCalendar(minusDay, minusDay);
+					break;
+				case KeyEvent.VK_PAGE_DOWN:
+					DateTime plusYear = CalendarPanel2.this.actuellDat.plusYears(1);
+					buildCalendar(plusYear, plusYear);
+					break;
+				case KeyEvent.VK_PAGE_UP:
+					DateTime minYear = CalendarPanel2.this.actuellDat.minusYears(1);
+					buildCalendar(minYear, minYear);
+					break;
+				case KeyEvent.VK_ENTER:
+					confirmDate(CalendarPanel2.this.actuellDat);
+					break;
+				case KeyEvent.VK_SPACE:
+					confirmDate(CalendarPanel2.this.actuellDat, false);
+					break;
+				case KeyEvent.VK_ESCAPE:
+					dispose();
+					break;
+				default:
+					break;
+				}
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+			}
+		});
+		
 		this.textField.addFocusListener(new FocusListener() {
 			
 			@Override
@@ -100,8 +161,6 @@ public class CalendarPanel2 extends JPanel implements MouseListener, _EntryPanel
 			@Override
 			public void focusGained(FocusEvent arg0) {
 //				textField.setEnabled(true);
-				
-				System.out.println("hello calendar field!");
 			}
 		});
 		// this.setBackground(Color.RED);
@@ -159,6 +218,8 @@ public class CalendarPanel2 extends JPanel implements MouseListener, _EntryPanel
 	
 	
 	
+	private DateTime actuellDat = null;
+	
 	public void activate() {
 		String text = this.textField.getText();
 		DateTime actuellDat = convert(text);
@@ -172,27 +233,24 @@ public class CalendarPanel2 extends JPanel implements MouseListener, _EntryPanel
 //		dialog.pack();
 		textField.setEnabled(false);
 	}
-
+	
 	private Point getDialogBounds(){
 
 		Point tfLoc = textField.getLocationOnScreen();
-		Dimension screen = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+		Point prefLoc = new Point(tfLoc.x, tfLoc.y);
 		
-		int x = tfLoc.x + textField.getWidth() - dialog.getWidth();
-		x = x < 0 ? 0 : x;
+		prefLoc.y = tfLoc.y + textField.getHeight();
+		prefLoc.x = tfLoc.x + textField.getWidth() - dialog.getWidth();
 		
-		int y = tfLoc.y + textField.getHeight();
-		y = y < 0 ? 0 : y;
+		Point onScreenLoc = SwingUtil.moveOnScreen(prefLoc, dialog.getWidth(), dialog.getHeight());
 		
-		if((x + dialog.getWidth() ) > screen.width){
-			x = screen.width - dialog.getWidth();
-		}
-		if((y + dialog.getHeight()) > screen.height){
-			y = tfLoc.y - dialog.getHeight();
-		}
+		onScreenLoc.y = prefLoc.y > onScreenLoc.y ? tfLoc.y - dialog.getHeight() : onScreenLoc.y;
 		
-		return new Point(x, y);
+		return onScreenLoc;
+		
 	}
+	
+
 	
 
 	@Override
@@ -218,6 +276,7 @@ public class CalendarPanel2 extends JPanel implements MouseListener, _EntryPanel
 	private void buildCalendar(final DateTime actuell,
 			final DateTime selectedDate) {
 		clear();
+		this.actuellDat = actuell;
 		this.setBorder(defaultBorder);
 		contentPanel = new JPanel();
 		contentPanel.setLayout(gbl);
@@ -466,10 +525,13 @@ public class CalendarPanel2 extends JPanel implements MouseListener, _EntryPanel
 			this.setOpaque(true);
 		}
 	}
-
 	private void confirmDate(DateTime date) {
+		confirmDate(date, true);
+	}
+	private void confirmDate(DateTime date, boolean dispose) {
 		this.textField.setText(convert(date));
-		dispose();
+		if(dispose)
+			dispose();
 	}
 
 	static DateTimeFormatter FMT = DateTimeFormat.forPattern("yyyy-MM-dd");

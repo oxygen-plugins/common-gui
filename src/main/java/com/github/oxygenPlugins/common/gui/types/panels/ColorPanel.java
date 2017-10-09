@@ -17,7 +17,6 @@ import java.awt.event.WindowFocusListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JDialog;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -29,6 +28,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.github.oxygenPlugins.common.gui.swing.SwingUtil;
+import com.github.oxygenPlugins.common.gui.types.LabelField;
 
 
 
@@ -41,15 +41,15 @@ public class ColorPanel extends JPanel implements MouseListener, _EntryPanel{
 	private final Border outlineBorder = BorderFactory.createBevelBorder(
 			BevelBorder.LOWERED, new Color(110, 110, 110), new Color(200, 200,
 					200));
-	private JFormattedTextField textField;
+	private LabelField textField;
 	private JLabel rgbCode = new JLabel();
 	private JSlider[] sliders = new JSlider[3];
 	private Color color;
 	private final Container owner;
-	public ColorPanel(JFormattedTextField field, Container owner){
+	public ColorPanel(LabelField field, Container owner){
 		this(field, field.getBackground(), owner);
 	}
-	public ColorPanel(final JFormattedTextField field, Color c, Container owner) {
+	public ColorPanel(final LabelField field, Color c, Container owner) {
 		this.textField = field;
 		this.owner = owner;
 		textField.setHorizontalAlignment(JTextField.CENTER);
@@ -190,20 +190,31 @@ public class ColorPanel extends JPanel implements MouseListener, _EntryPanel{
 			});
 			dialog.setUndecorated(true);
 			dialog.setMinimumSize(new Dimension(minWidth, minHeight));
-			Point tfLoc = textField.getLocationOnScreen();
+			
+			
 			dialog.setSize(textField.getWidth(), textField.getWidth());
-			dialog.setLocation(new Point(tfLoc.x + textField.getWidth()
-					- dialog.getWidth(), tfLoc.y + textField.getHeight()));
+			dialog.setLocation(getDialogBounds());
 			dialog.add(this);
 			dialog.setModal(false);
 			dialog.setVisible(true);
 		}
 	}
-//	private Frame getFrame(Component c) {
-//		if (c instanceof Frame)
-//			return (Frame) c;
-//		return getFrame(c.getParent());
-//	}
+
+	private Point getDialogBounds(){
+
+		Point tfLoc = textField.getLocationOnScreen();
+		Point prefLoc = new Point(tfLoc.x, tfLoc.y);
+		
+		prefLoc.y = tfLoc.y + textField.getHeight();
+		prefLoc.x = tfLoc.x + textField.getWidth() - dialog.getWidth();
+		
+		Point onScreenLoc = SwingUtil.moveOnScreen(prefLoc, dialog.getWidth(), dialog.getHeight());
+		
+		onScreenLoc.y = prefLoc.y > onScreenLoc.y ? tfLoc.y - dialog.getHeight() : onScreenLoc.y;
+		
+		return onScreenLoc;
+	}
+	
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub

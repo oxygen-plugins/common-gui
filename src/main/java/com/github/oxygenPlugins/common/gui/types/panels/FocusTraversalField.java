@@ -3,9 +3,9 @@ package com.github.oxygenPlugins.common.gui.types.panels;
 import java.awt.event.FocusListener;
 
 import javax.swing.JComponent;
-import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
 
-public class FocusTraversalField extends JFormattedTextField {
+public class FocusTraversalField extends JLabel {
 	
 	private static final long serialVersionUID = 1L;
 	private JComponent nextComponent = null;
@@ -18,13 +18,13 @@ public class FocusTraversalField extends JFormattedTextField {
 		this.prevComponent = prevComponent;
 		this.nextComponent = nextComponent;
 		
-		
 	}
 	
-	public void nextFocus(){
+	public void myNextFocus(){
 		if(nextComponent != null){
-			nextComponent.setEnabled(true);
-			nextComponent.requestFocus();
+			myFocus(nextComponent);
+		} else {
+			this.transferFocus();
 		}
 	}
 	
@@ -34,20 +34,21 @@ public class FocusTraversalField extends JFormattedTextField {
 	
 	public void prevFocus(){
 		if(prevComponent != null){
-			prevComponent.setEnabled(true);
-			prevComponent.requestFocus();
+			myFocus(prevComponent);
+		} else {
+			this.transferFocusBackward();
 		}
 	}
 
 	public void setPrevComponent(JComponent prevComp) {
 		this.prevComponent = prevComp;
+		if(prevComp instanceof FocusTraversalField){
+			((FocusTraversalField) prevComp).setNextComponent(this);
+		}
 	}
 
 	public void parentFocus(){
-		if(parentComponent != null){
-			parentComponent.setEnabled(true);
-			parentComponent.requestFocus();
-		}
+		myFocus(parentComponent);
 	}
 
 	public void setParentComponent(JComponent parentComp) {
@@ -59,6 +60,12 @@ public class FocusTraversalField extends JFormattedTextField {
 		FocusListener[] listeners = this.getFocusListeners();
 		for (FocusListener listener : listeners) {
 			this.removeFocusListener(listener);
+		}
+	}
+	
+	protected void myFocus(JComponent comp){
+		if(comp != null){
+			comp.requestFocus();
 		}
 	}
 }

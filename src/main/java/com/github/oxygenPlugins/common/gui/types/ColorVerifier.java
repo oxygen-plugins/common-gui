@@ -15,9 +15,9 @@ public class ColorVerifier extends ValidCharVerifier {
 		super("0123456789abcdefABCDEF", "");
 	}
 	@Override
-	public void setVerifier(JFormattedTextField field, Container owner) {
+	public void setVerifier(LabelField field, Container owner) {
+		field.setOpaque(true);
 		field.addMouseListener(new ColorPanel(field, owner));
-		super.setVerifier(field, owner);
 	}
 
 

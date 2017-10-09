@@ -40,7 +40,6 @@ public final class ImageUtils {
 	 *            the height
 	 * @return the extracted sub-image
 	 */
-	@SuppressWarnings("unused")
 	public static BufferedImage subimage(BufferedImage src, int x, int y,
 			int w, int h) {
 		if (!SUBIMAGE /* && w * h * 16 < src.getWidth() * src.getHeight() */) {

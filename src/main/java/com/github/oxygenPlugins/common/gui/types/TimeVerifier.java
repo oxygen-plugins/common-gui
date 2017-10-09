@@ -11,7 +11,6 @@ public class TimeVerifier implements _Verifier {
 
 	@Override
 	public void setVerifier(JFormattedTextField field, Container owner) {
-		field.addMouseListener(new TimePanel(field, 11, owner));
 	}
 
 	@Override
@@ -21,8 +20,8 @@ public class TimeVerifier implements _Verifier {
 	}
 
 	@Override
-	public void setVerifier(JFormattedTextField field, Container owner, boolean entryHelp) {
-		setVerifier(field, owner);
+	public void setVerifier(LabelField field, Container owner) {
+		field.addMouseListener(new TimePanel(field, 11, owner));
 	}
 
 }

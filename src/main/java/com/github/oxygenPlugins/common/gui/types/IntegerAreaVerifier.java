@@ -15,6 +15,8 @@ public class IntegerAreaVerifier implements _Verifier, KeyListener {
 	private final int start;
 	private final int end;
 	
+	private int errorValue;
+	
 	protected JFormattedTextField field = new JFormattedTextField();
 	public IntegerAreaVerifier(int end) {
 		this(0, end);
@@ -23,8 +25,22 @@ public class IntegerAreaVerifier implements _Verifier, KeyListener {
 		this.start = start;
 		this.end = end;
 		
+		
+		
+		this.errorValue = start;
 	}
 	
+	public void setErrorValue(int errorValue){
+		this.errorValue = errorValue;
+	}
+	
+	public boolean hasErrorValue(){
+		return checkValue(this.errorValue);
+	}
+	
+	private boolean checkValue(int value){
+		return value >= start && value <= end;
+	}
 	
 	
 	@Override
@@ -62,16 +78,26 @@ public class IntegerAreaVerifier implements _Verifier, KeyListener {
  				keyEvent.consume();
  			}
  		}
+		boolean isValid = false;
+		try {
+			isValid = checkValue(Integer.parseInt(field.getText()));
+		} catch (Exception e){
+			System.err.println(e.getMessage());
+		}
 		
+		if(!isValid){
+			field.setText(errorValue + "");
+		}
 		
-		System.out.println(newValue);
 //		System.out.println("pos: " + pos);
 //		System.out.println("selStart: " + selStart);
 //		System.out.println("selEnd: " + selEnd);
 		
 	}
+	
 	@Override
-	public void keyPressed(KeyEvent arg0) {}
+	public void keyPressed(KeyEvent arg0) {
+	}
 
 	@Override
 	public _Verifier getNewInstance() {
@@ -81,10 +107,8 @@ public class IntegerAreaVerifier implements _Verifier, KeyListener {
 	}
 
 	@Override
-	public void setVerifier(JFormattedTextField field, Container owner, boolean entryHelp) {
-		if(entryHelp)
-			field.addMouseListener(new StringPanel(field, this, owner));
-		setVerifier(field, owner);
+	public void setVerifier(LabelField field, Container owner) {
+		field.addMouseListener(new StringPanel(field, this, owner));
 	}
 
 }

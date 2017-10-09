@@ -1,31 +1,30 @@
 package com.github.oxygenPlugins.common.gui.types;
 
 import java.awt.Container;
-import java.awt.event.MouseListener;
 import java.util.HashMap;
 
-import javax.swing.JFormattedTextField;
+import javax.swing.JComponent;
 
 import com.github.oxygenPlugins.common.gui.types.converter.EnumTypeConverter;
 import com.github.oxygenPlugins.common.gui.types.converter.TypeConverter;
-import com.github.oxygenPlugins.common.gui.types.panels._EntryPanel;
 
 
 public class VerifierFactory {
 	private static final String DEFAULT_TYPE = "xs:string";
 	
-	public static _Verifier addVerifier(TypeConverter typeConverter, JFormattedTextField field, Container owner) {
-		return addVerifier(typeConverter, field, owner, true);
+	
+	public static LabelField createEntryLabel(JComponent prevComponent, JComponent nextComponent, TypeConverter typeConv, Container owner){
+		return new LabelField(prevComponent, nextComponent, typeConv, owner);
 	}
 	
-	public static _Verifier addVerifier(EnumTypeConverter typeConv, JFormattedTextField field, Container owner, boolean entryHelp) {
+	public static _Verifier addVerifier(EnumTypeConverter typeConv, LabelField field, Container owner) {
 		MultiChoiceVerifier mcVerifier = new MultiChoiceVerifier(typeConv.getEnumValuesAsString(), false);
-		mcVerifier.setVerifier(field, owner, entryHelp);
+		mcVerifier.setVerifier(field, owner);
 		return mcVerifier;
 	}
-	public static _Verifier addVerifier(TypeConverter typeConv, JFormattedTextField field, Container owner, boolean entryHelp) {
+	public static _Verifier addVerifier(TypeConverter typeConv, LabelField field, Container owner) {
 		if(typeConv instanceof EnumTypeConverter){
-			return addVerifier((EnumTypeConverter) typeConv, field, owner, entryHelp);
+			return addVerifier((EnumTypeConverter) typeConv, field, owner);
 		}
 		
 		String type = typeConv.getType();
@@ -33,12 +32,18 @@ public class VerifierFactory {
 		type = typeVerifierMap.containsKey(type) ? type : DEFAULT_TYPE;
 		if(typeVerifierMap.containsKey(type)){
 //			field.setEditable(false);
-			_Verifier verifier = typeVerifierMap.get(type).getNewInstance();
-			verifier.setVerifier(field, owner, entryHelp);
+			_Verifier verifier = getNewVerifier(type);
+			verifier.setVerifier(field, owner);
 			return verifier;
 		}
 		return null;
 	}
+
+	public static _Verifier getNewVerifier(String type) {
+		return typeVerifierMap.get(type).getNewInstance();
+	}
+	
+	
 
 	@SuppressWarnings("unused")
 	private static String[] types = new String[] { "float", "double",
@@ -56,6 +61,7 @@ public class VerifierFactory {
 		typeVerifierMap.put("xs:short", new IntegerVerifier("","+-"));
 		typeVerifierMap.put("xs:long", new IntegerVerifier("","+-"));
 		typeVerifierMap.put("xs:decimal", new IntegerVerifier(".","+-"));
+		typeVerifierMap.put("xs:double", new IntegerVerifier(".","+-"));
 		typeVerifierMap.put("xs:unsignedInt", new IntegerVerifier("","+"));
 		typeVerifierMap.put("xs:unsignedShort", new IntegerVerifier("","+"));
 		typeVerifierMap.put("sqf:color", new ColorVerifier());
@@ -68,13 +74,4 @@ public class VerifierFactory {
 		typeVerifierMap.put(type, verifier);
 	}
 	
-	public static void fireEntryPanel(JFormattedTextField field){
-		for (MouseListener ml : field.getMouseListeners()) {
-			if(ml instanceof _EntryPanel){
-				_EntryPanel entryPanel = (_EntryPanel) ml;
-				entryPanel.activate();
-				break;
-			}
-		}
-	}
 }

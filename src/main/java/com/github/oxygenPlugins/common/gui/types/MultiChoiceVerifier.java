@@ -4,10 +4,7 @@ import java.awt.Container;
 
 import javax.swing.JFormattedTextField;
 
-import com.github.oxygenPlugins.common.gui.types.panels.BooleanPanel;
-import com.github.oxygenPlugins.common.gui.types.panels.BooleanPanel2;
 import com.github.oxygenPlugins.common.gui.types.panels.MultiChoicePanel;
-import com.github.oxygenPlugins.common.gui.types.panels.StringPanel;
 
 public class MultiChoiceVerifier extends ValidCharVerifier {
 	private final String[] values;
@@ -20,12 +17,15 @@ public class MultiChoiceVerifier extends ValidCharVerifier {
 	
 	@Override
 	public void setVerifier(JFormattedTextField field, Container owner) {
-		MultiChoicePanel sp = new MultiChoicePanel(field, owner, this.values, this.isNullSelectable);
-		field.addMouseListener(sp);
-		super.setVerifier(field, owner);
 	}
 	@Override
 	public _Verifier getNewInstance() {
 		return new MultiChoiceVerifier(this.values, this.isNullSelectable);
+	}
+	
+	@Override
+	public void setVerifier(LabelField field, Container owner) {
+		MultiChoicePanel panel = new MultiChoicePanel(field, owner, values);
+		field.addMouseListener(panel);
 	}
 }

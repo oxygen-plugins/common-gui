@@ -30,11 +30,8 @@ import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
-
-import org.joda.time.DateTime;
 
 import com.github.oxygenPlugins.common.gui.images.IconMap;
 import com.github.oxygenPlugins.common.gui.swing.SwingUtil;

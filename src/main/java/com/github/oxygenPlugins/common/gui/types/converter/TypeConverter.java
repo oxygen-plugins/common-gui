@@ -4,10 +4,8 @@ import java.util.HashMap;
 
 import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.type.ValidationException;
-import net.sf.saxon.value.AtomicValue;
 import net.sf.saxon.value.DateTimeValue;
 import net.sf.saxon.value.DateValue;
-import net.sf.saxon.value.Int64Value;
 import net.sf.saxon.value.TimeValue;
 
 @SuppressWarnings("rawtypes")

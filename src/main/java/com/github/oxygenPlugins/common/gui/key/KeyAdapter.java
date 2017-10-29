@@ -4,9 +4,6 @@ import java.awt.Component;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import javax.swing.JComponent;
-
-import org.dom4j.swing.LeafTreeNode;
 
 public class KeyAdapter implements KeyListener {
 	

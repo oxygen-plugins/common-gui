@@ -18,7 +18,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
@@ -264,8 +263,8 @@ public class MultiChoicePanel extends JPanel implements MouseListener, FocusList
 	}
 
 	protected void setText() {
-		int value = this.entryBox.getSelectedIndex();
-		boolean isNull = isNull(value);
+		// int value = this.entryBox.getSelectedIndex();
+		// boolean isNull = isNull(value);
 		// this.textField.setEnabled(!isNull);
 		this.textField.setText(convert(this.entryBox.getSelectedIndex()));
 		textField.repaint();

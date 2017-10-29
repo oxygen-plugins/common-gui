@@ -20,7 +20,6 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -62,8 +61,8 @@ public class TimePanel extends JPanel implements MouseListener, _EntryPanel {
 
 	private final Border defaultBorder = BorderFactory.createBevelBorder(BevelBorder.RAISED, new Color(240, 240, 240),
 			new Color(150, 150, 150));
-	private final Border greenBorder = BorderFactory.createBevelBorder(BevelBorder.LOWERED, new Color(0, 110, 0),
-			new Color(0, 200, 0));
+//	private final Border greenBorder = BorderFactory.createBevelBorder(BevelBorder.LOWERED, new Color(0, 110, 0),
+//			new Color(0, 200, 0));
 	private final Border selectBorder = BorderFactory.createBevelBorder(BevelBorder.RAISED, new Color(30, 20, 120),
 			new Color(110, 100, 200));
 	private String initialValue;
@@ -246,7 +245,6 @@ public class TimePanel extends JPanel implements MouseListener, _EntryPanel {
 
 		setTime(actuell);
 
-		final HashMap<Integer, DateView> dateViewMap = new HashMap<Integer, DateView>();
 		final ArrayList<DateView> dateViewList = new ArrayList<DateView>();
 
 		DateView hourP = new DateView(icons.getIcon(6, 13)) {

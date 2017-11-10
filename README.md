@@ -16,6 +16,10 @@ This project contains a set of icons which was created by or based on icons whic
 
 ## Release Notes
 
+### Version 0.1.1
+
+- Use component common-xml version 0.1.1
+
 ### Version 0.1.0
 
 - Remodeling Verifier / Entry panels:

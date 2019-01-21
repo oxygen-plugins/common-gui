@@ -21,6 +21,17 @@ public class EnumTypeConverter extends TypeConverter {
 		}
 	}
 
+	public EnumTypeConverter(String type, String[] values, int defaultValue) {
+		super(type, TypeConverter.convertValue(values[defaultValue], type));
+		// E N U M E R A T I O N
+		enumValues = new Object[values.length];
+		for (int i = 0; i < values.length; i++) {
+			String enumVal = values[i];
+			enumValues[i] = this.convertValue(enumVal);
+		}
+
+	}
+	
 	public EnumTypeConverter(String type, NodeList values, int defaultValue) {
 		super(type, TypeConverter.convertValue(getNodeValue(values.item(defaultValue)), type));
 		// E N U M E R A T I O N

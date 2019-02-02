@@ -56,6 +56,8 @@ public class TypeConverter {
 					|| type.equals("xs:unsignedShort") || type.equals("xs:double")) {
 				double valDouble = value.equals("") ? 0.0 : Double.parseDouble(value);
 				result = getClass(type).cast(valDouble);
+			} else if(type.equals("xs:string")){
+				result = getClass(type).cast(makeMultipleLines(value));
 			} else {
 				result = getClass(type).cast(value);
 			}
@@ -131,7 +133,7 @@ public class TypeConverter {
 			DateTimeValue dateTime = (DateTimeValue) value;
 			return dateTime.getPrimitiveStringValue().toString();
 		}
-		return value.toString();
+		return makeOneLine(value.toString());
 	}
 
 	public String getType() {
@@ -147,6 +149,14 @@ public class TypeConverter {
 	public Object getDefault() {
 		// TODO Auto-generated method stub
 		return this.defaultValue;
+	}
+
+	public static String makeOneLine(String text){
+		return text.replaceAll("\\n", "\\\\n");
+	}
+
+	public static String makeMultipleLines(String text){
+		return text.replaceAll("\\\\n", "\n");
 	}
 
 }

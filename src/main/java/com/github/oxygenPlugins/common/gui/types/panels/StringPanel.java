@@ -396,4 +396,78 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 
 
 
+
+	private class ExpandedPanel extends JDialog {
+
+		private final JFormattedTextField entryField;
+		private final JTextArea textArea = new JTextArea();
+		public ExpandedPanel(JDialog parent, JFormattedTextField entryField){
+			super(parent);
+			this.entryField = entryField;
+			init();
+		}
+
+		private void init(){
+
+			textArea.setFont( SwingUtil.decreceFontSize( entryField.getFont(), 1.2));
+
+			this.setTitle(textField.getTitle());
+
+			textArea.addKeyListener(new KeyListener() {
+				@Override
+				public void keyTyped(KeyEvent e) {
+
+				}
+
+				@Override
+				public void keyPressed(KeyEvent e) {
+
+				}
+
+				@Override
+				public void keyReleased(KeyEvent e) {
+					switch (e.getKeyChar()){
+						case '\n':
+							if(e.isControlDown()){
+								disposeMe();
+							}
+					}
+				}
+			});
+
+			this.addWindowListener(new WindowAdapter() {
+				@Override
+				public void windowClosing(WindowEvent e) {
+					disposeMe();
+				}
+			});
+
+			this.setSize(800, 300);
+			this.setMinimumSize(new Dimension(800, 300));
+			this.setPreferredSize(new Dimension(800, 300));
+			this.setModal(true);
+			this.getContentPane().add(textArea);
+
+
+			this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+		}
+
+		private void expand(){
+
+			isExpanded = true;
+			textArea.setText(makeMultipleLines(this.entryField.getText()));
+
+			this.pack();
+			SwingUtil.centerFrame(this);
+			this.setVisible(true);
+		}
+
+		private void disposeMe(){
+			entryField.setText(makeOneLine(textArea.getText()));
+			isExpanded = false;
+			StringPanel.this.dispose();
+		}
+
+	}
 }

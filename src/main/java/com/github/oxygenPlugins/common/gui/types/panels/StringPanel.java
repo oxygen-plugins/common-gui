@@ -391,6 +391,9 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 
 	public void expand(){
 
+		ExpandedPanel expanded = new ExpandedPanel(this.dialog, entryField);
+
+		expanded.expand();
 		
 	}
 

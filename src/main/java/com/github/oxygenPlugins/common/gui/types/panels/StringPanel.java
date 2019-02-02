@@ -41,9 +41,11 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 
 	private final JPanel buttonPanel = new JPanel();
 	private final JButton okBtn;
+	private final JButton expBtn;
 	@SuppressWarnings("unused")
 	private final JButton cancelBtn;
 	private final JButton clearBtn;
+	private boolean isExpanded = false;
 
 	private class PanelButton extends JButton {
 		private static final long serialVersionUID = 1699184718806511284L;
@@ -94,10 +96,12 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 			this.okBtn = new PanelButton(icons.getIcon(2, 10));
 			this.clearBtn = new PanelButton(icons.getIcon(10, 11));
 			this.cancelBtn = new PanelButton(icons.getIcon(0, 10));
+			this.expBtn = new PanelButton(icons.getIcon(0, 11));
 		} else {
 			this.okBtn = new PanelButton("ok");
 			this.clearBtn = new PanelButton("x");
 			this.cancelBtn = new PanelButton("c");
+			this.expBtn = new PanelButton("+");
 		}
 
 		this.okBtn.addActionListener(new ActionListener() {
@@ -121,6 +125,10 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 			}
 		});
 
+		this.expBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				expand();
 			}
 		});
 
@@ -130,6 +138,7 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 
 		
 		entryField = new JFormattedTextField();
+		entryField.setFont(field.getFont());
 		if (value == null) {
 			entryField.setText("");
 		} else {
@@ -197,6 +206,17 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 
 		SwingUtil.addComponent(this, gbl, clearBtn, 1, 1, 1, 1, 0.0, 1.0, GridBagConstraints.SOUTHEAST,
 				GridBagConstraints.VERTICAL, new Insets(0, 0, 3, 3));
+
+		if("xs:string".equals(field.getType().getType())){
+
+			SwingUtil.addComponent(this, gbl, cancelBtn, 2, 0, 1, 1, 0.0, 1.0, GridBagConstraints.NORTHEAST,
+					GridBagConstraints.VERTICAL, new Insets(3, 0, 0, 3));
+
+
+			SwingUtil.addComponent(this, gbl, expBtn, 2, 1, 1, 1, 0.0, 1.0, GridBagConstraints.SOUTHEAST,
+					GridBagConstraints.VERTICAL, new Insets(0, 0, 3, 3));
+
+		}
 
 		MouseListener ml = new MouseListener() {
 			@Override
@@ -349,8 +369,10 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 				this.setText();
 		}
 		if (dialog != null) {
+			if(!this.isExpanded){
 				this.dialog.dispose();
 				this.dialog = null;
+			}
 		}
 		this.textField.parentFocus();
 	}
@@ -366,4 +388,12 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 	public void focusLost(FocusEvent arg0) {
 		// dispose();
 	}
+
+	public void expand(){
+
+		
+	}
+
+
+
 }

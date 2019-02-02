@@ -349,7 +349,7 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 	}
 
 	private enum DisposeOptions {
-		RESET, OK, CANCEL
+		RESET, OK, CANCEL, REDUCE
 	}
 
 	protected void dispose() {
@@ -459,7 +459,58 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 			this.setMinimumSize(new Dimension(800, 300));
 			this.setPreferredSize(new Dimension(800, 300));
 			this.setModal(true);
-			this.getContentPane().add(textArea);
+
+			IconMap icons = IconMap.ICONS;
+
+			PanelButton okBtn = new PanelButton(icons.getIcon(2, 10));
+			PanelButton clearBtn = new PanelButton(icons.getIcon(10, 11));
+			PanelButton cancelBtn = new PanelButton(icons.getIcon(0, 10));
+			PanelButton suspBtn = new PanelButton(icons.getIcon(18, 10));
+
+			okBtn.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					disposeMe();
+				}
+			});
+
+			clearBtn.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					disposeMe(DisposeOptions.RESET);
+				}
+			});
+
+			cancelBtn.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					disposeMe(DisposeOptions.CANCEL);
+				}
+			});
+
+			suspBtn.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					disposeMe(DisposeOptions.REDUCE);
+				}
+			});
+			Container c = this.getContentPane();
+
+			GridBagLayout gbl = new GridBagLayout();
+
+			JPanel toolbar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+
+			toolbar.setBackground(textArea.getBackground());
+			toolbar.setOpaque(true);
+			c.setLayout(gbl);
+			toolbar.add(suspBtn);
+			toolbar.add(clearBtn);
+			toolbar.add(cancelBtn);
+			toolbar.add(okBtn);
+
+			SwingUtil.addComponent(c, gbl, textArea, 0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.SOUTH, GridBagConstraints.BOTH);
+			SwingUtil.addComponent(c, gbl, toolbar, 0, 1, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL);
+
 
 
 			this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -481,11 +532,28 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 		}
 
 		private void disposeMe(DisposeOptions option){
-			if(option == DisposeOptions.OK){
-				entryField.setText(makeOneLine(textArea.getText()));
-			}
 			isExpanded = false;
+
+			switch (option){
+				case OK:
+					takeValueOver();
+					disposePanel(option);
+					break;
+				case REDUCE:
+					takeValueOver();
+					this.dispose();
+					break;
+				default:
+					disposePanel(option);
+					break;
+			}
+		}
+		private void disposePanel(DisposeOptions option){
 			StringPanel.this.dispose(option);
+		}
+
+		private void takeValueOver(){
+			entryField.setText(makeOneLine(textArea.getText()));
 		}
 
 	}

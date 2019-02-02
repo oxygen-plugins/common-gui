@@ -180,6 +180,8 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 				} else if(e.getKeyCode() == KeyEvent.VK_DOWN){
 					dispose();
 					textField.myNextFocus();
+				} else if(e.getKeyCode() == KeyEvent.VK_F2){
+					expand();
 				}
 			}
 
@@ -434,6 +436,14 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 							if(e.isControlDown()){
 								disposeMe();
 							}
+							break;
+						case KeyEvent.VK_ESCAPE:
+							if(e.isShiftDown()){
+								disposeMe(DisposeOptions.RESET);
+							} else {
+								disposeMe(DisposeOptions.CANCEL);
+							}
+							break;
 					}
 				}
 			});
@@ -441,7 +451,7 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 			this.addWindowListener(new WindowAdapter() {
 				@Override
 				public void windowClosing(WindowEvent e) {
-					disposeMe();
+					disposeMe(DisposeOptions.CANCEL);
 				}
 			});
 
@@ -467,9 +477,15 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 		}
 
 		private void disposeMe(){
-			entryField.setText(makeOneLine(textArea.getText()));
+			disposeMe(DisposeOptions.OK);
+		}
+
+		private void disposeMe(DisposeOptions option){
+			if(option == DisposeOptions.OK){
+				entryField.setText(makeOneLine(textArea.getText()));
+			}
 			isExpanded = false;
-			StringPanel.this.dispose();
+			StringPanel.this.dispose(option);
 		}
 
 	}

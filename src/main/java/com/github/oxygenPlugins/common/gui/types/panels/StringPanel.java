@@ -1,35 +1,11 @@
 package com.github.oxygenPlugins.common.gui.types.panels;
 
 
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Dialog;
-import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Window;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.io.IOException;
 
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 
@@ -38,7 +14,8 @@ import com.github.oxygenPlugins.common.gui.swing.SwingUtil;
 import com.github.oxygenPlugins.common.gui.types.LabelField;
 import com.github.oxygenPlugins.common.gui.types._Verifier;
 
-//
+import static com.github.oxygenPlugins.common.gui.types.converter.TypeConverter.*;
+
 public class StringPanel extends JPanel implements MouseListener, FocusListener, _EntryPanel {
 	private static final long serialVersionUID = 2661956887580911488L;
 	private final GridBagLayout gbl;

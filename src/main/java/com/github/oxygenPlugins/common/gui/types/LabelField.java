@@ -28,6 +28,7 @@ public class LabelField extends FocusTraversalField {
 	private final ArrayList<_ValueListener> valueListener = new ArrayList<_ValueListener>();
 	
 	private _EntryPanel entryPanel = null;
+	private String title;
 
 	LabelField(TypeConverter type, Container owner) {
 		this(null, null, type, owner);
@@ -128,9 +129,10 @@ public class LabelField extends FocusTraversalField {
 	}
 
 	private void setStyle(int style) {
-		Font FONT = new JLabel().getFont();
-		if (FONT != null) {
-			Font font = new Font(FONT.getName(), style, FONT.getSize());
+
+		Font oFont = this.getFont();
+		if (oFont != null) {
+			Font font = new Font(oFont.getName(), style, oFont.getSize());
 			this.setFont(font);
 		}
 	}
@@ -171,5 +173,14 @@ public class LabelField extends FocusTraversalField {
 		
 		
 	}
+
+	public void setTitle(String title){
+		this.title = title;
+	}
+
+	public String getTitle(){
+		return this.title;
+	}
+
 
 }

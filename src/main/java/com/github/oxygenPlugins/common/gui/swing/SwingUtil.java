@@ -1,17 +1,6 @@
 package com.github.oxygenPlugins.common.gui.swing;
 
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
-import java.awt.Window;
+import java.awt.*;
 import java.util.ArrayList;
 
 public class SwingUtil {
@@ -223,5 +212,11 @@ public class SwingUtil {
 		return getMove(visible, hidden);
 		
 		
+	}
+
+	public static Font decreceFontSize(Font f, double factor){
+		int nSize = (int) (f.getSize() * factor);
+		Font nFont = new Font(f.getName(), f.getStyle(), nSize );
+		return nFont;
 	}
 }

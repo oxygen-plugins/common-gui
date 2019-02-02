@@ -33,6 +33,7 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 	private LabelField textField;
 
 	private String value;
+	private String lastValue;
 	private final String initialValue;
 
 	private JFormattedTextField entryField;
@@ -109,7 +110,17 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 		this.clearBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dispose(true);
+				dispose(DisposeOptions.RESET);
+			}
+		});
+
+		this.cancelBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose(DisposeOptions.CANCEL);
+			}
+		});
+
 			}
 		});
 
@@ -139,7 +150,11 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 				if (e.getKeyChar() == '\n') {
 					dispose();
 				} else if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
-					dispose(true);
+					if(e.isShiftDown()){
+						dispose(DisposeOptions.RESET);
+					} else {
+						dispose(DisposeOptions.CANCEL);
+					}
 					textField.parentFocus();
 				} else if (e.getKeyChar() == KeyEvent.VK_TAB) {
 
@@ -258,7 +273,7 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 	
 	public synchronized void activate() {
 		synchronized (this) {
-			
+			this.lastValue =  textField.getValueAsString();
 			this.getText();
 			// if (dialog != null) {
 			// dispose();
@@ -311,21 +326,31 @@ public class StringPanel extends JPanel implements MouseListener, FocusListener,
 		// }
 	}
 
-
-	protected void dispose() {
-		this.dispose(false);
+	private enum DisposeOptions {
+		RESET, OK, CANCEL
 	}
 
-	private void dispose(boolean unsetText) {
-		if (unsetText) {
-			this.textField.setText(initialValue);
-			this.textField.repaint();
-		} else {
-			this.setText();
+	protected void dispose() {
+		this.dispose(DisposeOptions.OK);
+	}
+
+	private void dispose(DisposeOptions unsetText) {
+		switch (unsetText){
+			case RESET:
+				this.textField.setText(initialValue);
+				this.textField.repaint();
+			break;
+
+			case CANCEL:
+				this.textField.setText(lastValue);
+				this.textField.repaint();
+			break;
+			default:
+				this.setText();
 		}
 		if (dialog != null) {
-			this.dialog.dispose();
-			this.dialog = null;
+				this.dialog.dispose();
+				this.dialog = null;
 		}
 		this.textField.parentFocus();
 	}

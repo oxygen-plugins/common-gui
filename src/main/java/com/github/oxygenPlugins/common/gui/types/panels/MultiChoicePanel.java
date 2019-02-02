@@ -46,7 +46,7 @@ public class MultiChoicePanel extends JPanel implements MouseListener, FocusList
 	private static final long serialVersionUID = 2661956887580911488L;
 	private final GridBagLayout gbl;
 
-	private final int minWidth = 100;
+	private final int minWidth;
 	private final int minHeight = 30;
 
 	private final int maxHeight = 30;
@@ -97,11 +97,20 @@ public class MultiChoicePanel extends JPanel implements MouseListener, FocusList
 		this(field, owner, values, false);
 	}
 
+	private int getMaxValueLength(String[] values){
+		int length = 15;
+		for (String val: values){
+			length = val.length() > length ? val.length() : length;
+		}
+
+		return length;
+	}
+
 	public MultiChoicePanel(final LabelField field, Container owner, String[] values, boolean isNullSelectable) {
 		this.owner = owner;
 		this.textField = field;
 		textField.setHorizontalAlignment(JTextField.CENTER);
-
+		this.minWidth = getMaxValueLength(values) * 12;
 		this.valueList = new ArrayList<String>();
 		this.hasNull = !field.getType().hasDefault();
 
@@ -198,7 +207,7 @@ public class MultiChoicePanel extends JPanel implements MouseListener, FocusList
 					if (e.isShiftDown()) {
 						textField.prevFocus();
 					} else {
-						textField.myNextFocus();;
+						textField.myNextFocus();
 					}
 				}
 			}
@@ -375,6 +384,8 @@ public class MultiChoicePanel extends JPanel implements MouseListener, FocusList
 		finalHeight = this.minHeight > 0 && this.minHeight > finalHeight ? this.minHeight : finalHeight;
 
 		finalWidth = this.maxWidth > 0 && this.maxWidth < finalWidth ? this.maxWidth : finalWidth;
+
+		finalWidth = this.minWidth > 0 && this.minWidth > finalWidth ? this.minWidth : finalWidth;
 
 		dialog.setMaximumSize(new Dimension(finalWidth, finalHeight));
 
